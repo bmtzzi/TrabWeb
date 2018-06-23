@@ -1,0 +1,244 @@
+@charset "utf-8";
+/* CSS Document */
+
+header a{
+	 text-decoration: none;
+	 color: black;
+}
+
+#navCima{
+	clear: both;
+	background-color: orangered;
+	text-align: left;
+}
+
+#navCima a{
+	display: inline-block;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	color: white;
+}
+
+#navCima a:hover{
+	background-color: red;
+}
+
+#navCima a.active{
+	background-color: brown;
+	color: black;
+}
+
+#welcome{
+	display: inline;
+	margin-right: 30px;
+	margin-top: 12px;
+	float: right;
+	color: white;
+}
+
+#divFinalizarCompra{
+	clear: both;
+	width: 50%;
+	margin-left: 40%;
+}
+
+#formularioAgendamento{
+	width: 50%;
+	margin-left: 25%;
+	margin-top: 30px;
+}
+
+#secConsultarAgenda{
+	float: left;
+	width: 20%;
+	margin-left: 5%;
+	margin-top: 20px;
+}
+
+#secConsultarAgenda2{
+	text-align: left;
+	float: right;
+	width: 50%;
+	margin-right: 5%;
+	margin-top: 20px;
+}
+
+#dataConsAgenda{
+	clear: both;
+	margin-top: 20px;
+}
+
+.secCadastraCliente{
+	margin: 50px 0px 0px 7%;
+	width: auto;
+	float: left;
+}
+
+.navLateral a:hover{
+	background-color: #F97936;
+}
+
+.navLateral{
+	clear: both;
+	display: grid;
+}
+
+.navLateral a{
+	padding: 10px 10px;
+	text-align: left;
+}
+
+.navLateral a.active{
+	background-color: darksalmon;
+}
+
+aside{
+	border-color: gray;
+	border-style: solid;
+	border-width: thin;
+	border-top: none;
+	float: left;
+	width: auto;
+}
+
+#navCima a#botaoCarrinho{
+	float: right;
+	padding: 11px 16px;
+}
+
+.formularioUsuario{
+	margin-left: 40%;
+	margin-top: 40px;
+}
+
+.compras{
+	float: right;
+	width: 80%;
+}
+
+aside.foto{
+	margin: 50px 10% 0px 0px;
+	float: right;
+	width: auto;
+}
+
+figure.home{
+	float: left;
+	width: 110px;
+	height: 150px;
+}
+
+figure.loja{
+	float: left;
+	width: 200px;
+	height: 200px;
+	display:grid;
+	justify-content: center;
+}
+
+figcaption{
+	text-align: center;
+}
+
+.inputQtd{
+	float: left;
+	text-align: center;
+	width: 50px;
+}
+
+.inputQtdCarrinho{
+	float: left;
+	margin-left: 48.4%;
+	text-align: center;
+	width: 50px;
+	margin-top: 10px;
+}
+
+.inputQtdGanho{
+	float: left;
+	margin-left: 62%;
+	text-align: center;
+	margin-top: 10px;
+	width: 50px;
+}
+
+.legendaCarrinho{
+	display: inline-block;
+	width: 33%;
+}
+
+.primeiroItemCarrinho{
+	border: solid;
+	border-width: thin;
+	height: 40px;
+	width: 100%;
+}
+
+.outroItemCarrinho{
+	border-style: none solid solid solid;
+	border-width: thin;
+	height: 50px;
+	width: 100%;
+	margin: 0px;
+}
+
+.nomeProdutoCarrinho{
+	float: left;
+	margin: 10px 0px 0px 10px;
+}
+
+.precoProdutoCarrinho{
+	display: inline-block;
+	float: right;
+	margin: 10px 10px 0px 0px;
+}
+
+.listaCarrinho{
+	list-style: none;
+	padding: 0px;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+.semBorda{
+	border: none;
+}
+
+.imgGanhos{
+	float: left;
+	margin: 5px 0px 0px 5px;
+}
+
+.imgGanhos2{
+	float: left;
+	margin: -3px 0px 0px 5px;
+}
+
+.secGanhos{
+	float: right;
+	width: 88%;
+}
+
+.pGanhos{
+	clear: both;
+	margin: 0px;
+}
+
+.subtotal{
+	clear: both;
+	float: right;
+	margin: 0px 20px 0px 0px;
+	font-size: 21px;
+	font-weight: bold;
+}
+
+footer{
+	clear: both;
+	position: relative;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
+	padding-top: 30px;
+}

@@ -1,0 +1,38 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Petit Gatô Cachorrô</title>
+<link href="estilo.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<header>
+		<img onClick="alterarPagina('paginaPrincipal')" style="float: left" src="Imagens/pet-shop-.jpg" alt="Logo" width="116px" height="77px"/>
+		<h1 onClick="alterarPagina('paginaPrincipal')">Petit Gatô Cachorrô</h1>
+		<h3>Encontrando seu melhor amigo!</h3>
+	</header>
+	<nav id="navCima">
+		<a id="navCimaLoja" onClick="alterarPagina('loja')">Loja</a>
+		<a id="navCimaServicos" onClick="alterarPagina('servicos')">Serviços</a>
+		<a id="navCimaPets" onClick="alterarPagina('pets')">Pets</a>
+		<a id="navCimaBlog" onClick="alterarPagina('blog')">Blog</a>
+		<a id="botaoCarrinho" onClick="alterarPagina('carrinho')">
+			<img src="Imagens/carrinho-de-compras.jpg" alt="carrinho" width="20px" height="20px">
+		</a>
+		<a id="navCimaLogin" style="float:right" onClick="alterarPagina('loginRequest')">Login</a>
+	</nav>
+    <main>
+        
+    </main>
+    
+	<footer>Petit Gatô Cachorrô&reg;. All rights reserved.</footer>
+
+    <script src="javascript/bancoDados.js"></script>
+    <script src="javascript/scripts.js"></script>
+    <script src="javascript/funcoesMontaPagEsperandoOBdFuncionar.js"></script>
+    <script>
+        window.onload = () => alterarPagina('paginaPrincipal');
+    </script>
+</body>
+</html>

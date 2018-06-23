@@ -1,0 +1,50 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Petit Gatô Cachorrô</title>
+<link href="estilo.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	Foto:
+	<img id="imagemCadastro" src="Imagens/userDefault.jpg" alt="userDefault" width="90px" height="90px" id="fotoCliente"/>
+	<br/>
+	<br/>
+	<br/>
+	<form style="clear: both">
+		Alterar Foto:
+		<input id="inputImagemCadastro" type="file" onchange="alterouImagemCadastro(this)">
+		<br/>
+		<br/>
+		Nome:
+		<input id="nomeCliente" type="text" name="cadastroCliente" id="cadastroCliente">
+		<br/>
+		<br/>
+		Endereço:
+		<input id="enderecoCliente" type="text" name="enderecoCliente" id="enderecoCliente">
+		<br/>
+		<br/>
+		Telefone:
+		<input id="telefoneCliente" type="tel" name="telefoneCliente" id="telefoneCliente">
+		<br/>
+		<br/>
+		E-mail:
+		<input id="emailCliente" type="email" name="emailCliente" id="emailCliente">
+		<br/>
+		<br/>
+		Login:
+		<input id="loginCliente" type="text" name="LoginCliente" id="LoginCliente">
+		<br/>
+		<br/>
+		Senha:
+		<input id="senhaCliente" type="password" name="senhaCliente" id="senhaCliente">
+		<br/>
+		<br/>		
+		<br/>
+		<input type="button" onClick="alterarPagina('listaCliente')" value="Voltar"/>
+		<input type="button" onclick="cadastrarCliente()" value="Salvar"/>
+	</form>
+	<br>
+</body>
+</html>

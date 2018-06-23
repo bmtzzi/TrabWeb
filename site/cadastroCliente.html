@@ -1,0 +1,42 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Petit Gatô Cachorrô</title>
+<link href="estilo.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	Foto:
+	<img id="imagemCadastro" alt="foto do cliente" width="110px" height="128px"/>
+	<br/>
+	<br/>
+	<br/>
+	<form style="clear: both">
+		Alterar Foto:
+		<input id="inputImagemCadastro" type="file" onchange="alterouImagemCadastro(this)">
+		<br/>
+		<br/>
+		Nome:
+		<input id="nomeCliente" type="text" name="cadastroCliente">
+		<br/>
+		<br/>
+		Endereço:
+		<input id="enderecoCliente" type="text" name="enderecoCliente">
+		<br/>
+		<br/>
+		Telefone:
+		<input id="telefoneCliente" type="tel" name="telefoneCliente">
+		<br/>
+		<br/>
+		E-mail:
+		<input id="emailCliente" type="email" name="emailCliente">
+		<br/>
+		<br/>
+		<br/>
+		<input id="voltar" type="button" onClick="alterarPagina('loginClienteSucesso', String(this.cod))" value="Voltar" style="display: none;"/>
+		<input id="salvar" type="button" onClick="alterarCadastroCliente(this.cod, false)" value="Salvar"/>
+	</form>
+	<br>
+</body>
+</html>

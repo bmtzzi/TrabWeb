@@ -1,0 +1,32 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Petit Gatô Cachorrô</title>
+<link href="estilo.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<section class="secCadastraCliente">
+		<button onClick="alterarPagina('cadastrarProduto')">+ Cadastrar novo produto</button>
+		<br/><br/><br/>
+		<ul id="listaProdutos">
+
+		</ul>
+	</section>
+	<form style="width: auto; margin: 35px 10% 0px 0px; float: right;">
+       		<p>Busca</p>
+        	<input type="search" name="pesquisaProduto" required placeholder="Nome do produto" />
+        	<br/><br/><br/>
+	    	<p>Filtros</p>
+       		<input name="cachorro" type="checkbox" value=" cachorro"> Cachorro<br />
+	        <input name="gato" type="checkbox" value="gato"> Gato<br />
+       		<input name="peixe" type="checkbox" value="peixe"> Peixe<br />
+        	<input name="reptil" type="checkbox" value="reptil"> Réptil<br />
+        	<input name="ave" type="checkbox" value="ave"> Ave<br />
+	        <input name="roedor" type="checkbox" value="roedor"> Roedor<br />
+       		<input type="submit" value="Pesquisar" style="float: left;margin-top: 38px"/>
+	</form>
+    <br/>
+</body>
+</html>

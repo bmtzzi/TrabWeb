@@ -1,0 +1,36 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Petit Gatô Cachorrô</title>
+<link href="estilo.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	Foto:
+	<img id="imagemCadastro" src="Imagens/petDefault.jpg" alt="petDefault" width="90px" height="90px"/>
+	<br/>
+	<br/>
+	<br/>
+	<form>
+		Alterar Foto:
+		<input id="inputImagemCadastro" type="file" onchange="alterouImagemCadastro(this)">
+		<br/>
+		<br/>
+		Nome:
+		<input type="text" name="nomePet" id="nomePet">
+		<br/>
+		<br/>
+		Raça:
+		<input type="text" name="racaPet" id="racaPet">
+		<br/>
+		<br/>
+		Idade:
+		<input type="number" name="idadePet" id="idadePet">
+		<br/>
+		<br/>
+		<button type="button" onClick="cadastrarPet(String(this.cod))">Salvar</button>
+	</form>
+	<br>
+</body>
+</html>

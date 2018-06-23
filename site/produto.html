@@ -1,0 +1,23 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Petit Gatô Cachorrô</title>
+<link href="estilo.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<img id="produtoImagem" width="20%" height="auto" style="float:left;"/>
+	<section class="compras">
+		<h1 id="nomeMarca"></h1>
+		<h1>R$ <span id="preco"></span></h1>
+		<p style="clear: both">
+			Quantidade:<br/>
+			<input class="inputQtd" type="number" value="1" min="0" maxlength="2"/>
+			<br/><br/>Descrição do produto:<br/><h3 id="descricao"></h3>
+		</p>
+		<button id="comprar" onClick="adicionarCarrinho('produto', String(this.cod))">Comprar</button>
+	</section>
+	<br/>
+</body>
+</html>

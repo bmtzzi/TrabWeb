@@ -1,0 +1,58 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Petit Gatô Cachorrô</title>
+<link href="estilo.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<section id="secaoAgendamento">
+		<form id="formularioAgendamento">
+        	    <fieldset style="float: left">
+            		<legend>Data, Serviço, Pet</legend>
+	                <input onChange="mostraData()" id="agendamentoData" type="date" name="dataAgendamento" required>
+        	        <br/>
+                	<br/>
+	               	<select id="agendamentoServico" name="servico" form="FormularioAgendamento">
+
+		        </select>
+                	<select id="agendamentoPet" name="pet" form="FormularioAgendamento">
+
+	        	</select>
+	            </fieldset>
+        	    <fieldset id="horariosAgendamento" style="float: right">
+            		<legend>Horário</legend>
+	                <input type="radio" name="horarioAgendamento" value="8:00"/>08:00
+        	        <br />
+                	<input type="radio" name="horarioAgendamento" value="9:00"/>09:00
+	                <br />
+		        <input type="radio" name="horarioAgendamento" value="10:00" disabled/>10:00 <img src="Imagens/Vacinacao-de-Animais.jpg" alt="Imagem de um animal recebendo vacina" width="20px" height="auto"/>vacina, Maya
+	                <br />
+                	<input type="radio" name="horarioAgendamento" value="11:00"/>11:00
+        	        <br />
+                	<input type="radio" name="horarioAgendamento" value="12:00"/>12:00
+	                <br />
+        	        <input type="radio" name="horarioAgendamento" value="13:00"/>13:00
+                	<br />
+	                <input type="radio" name="horarioAgendamento" value="14:00"/>14:00
+        	        <br />
+                	<input type="radio" name="horarioAgendamento" value="15:00" disabled/>15:00 <img src="Imagens/Vacinacao-de-Animais.jpg" alt="Imagem de um animal recebendo vacina" width="20px" height="auto"/>vacina, Bertolomeu
+	                <br />
+        	        <input type="radio" name="horarioAgendamento" value="16:00"/>16:00
+                	<br />
+	                <input type="radio" name="horarioAgendamento" value="17:00"/>17:00
+        	        <br />
+                	<input type="radio" name="horarioAgendamento" value="18:00"/>18:00
+	                <br />
+        	    </fieldset>
+		    <br/>
+		    <br/>
+		    <div id="divFinalizarCompra">
+            		<input style="margin-top: 10%" type="submit" value="Marcar horário"/>
+		    </div>
+		</form>
+		<br>
+	</section>
+</body>
+</html>

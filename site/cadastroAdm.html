@@ -1,0 +1,39 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Petit Gatô Cachorrô</title>
+<link href="estilo.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	Foto:
+	<img id="imagemCadastro" alt="fotAdministrador" width="136px" height="154px"/>
+	<br/>
+	<br/>
+	<br/>
+	<form style="clear: both">
+		Alterar Foto:
+		<input id="inputImagemCadastro" type="file" onchange="alterouImagemCadastro(this)">
+		<br/>
+		<br/>
+		Nome:
+		<input id="nomeAdm" type="text" name="cadastroAdm">
+		<br/>
+		<br/>
+		Telefone:
+		<input id="telefoneAdm" type="tel" name="telefoneAdm">
+		<br/>
+		<br/>
+		E-mail:
+		<input id="emailAdm" type="email" name="emailAdm">
+		<br/>
+		<br/>
+		<br/>
+		<input id="voltar" type="button" onClick="alterarPagina('listaAdm')" value="Voltar"/>
+		<input id="remover" type="button" onClick="removerCadastroAdm(this.cod)" value="Remover Cadastro"/>
+		<input id="salvar" type="button" onClick="alterarCadastroAdm(this.cod)" value="Salvar"/>
+	</form>
+	<br>
+</body>
+</html>

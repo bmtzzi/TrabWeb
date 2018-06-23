@@ -1,0 +1,19 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Petit Gatô Cachorrô</title>
+<link href="estilo.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<img id="servicoImagem" width="18%" height="auto" style="float:left"/>
+	<section class="compras">
+		<h1 id="servicoNome"></h1>
+		<h1>R$ <span id="preco"></span></h1>
+		<p style="clear: both"><br/>Descrição do produto:<br/><h3 id="descricao"></h3></p>
+		<button id="comprar" onClick="adicionarCarrinho('servico', String(this.cod))">Comprar</button>
+	</section>
+	<br/>
+</body>
+</html>

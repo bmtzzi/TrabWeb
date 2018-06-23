@@ -1,0 +1,25 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Petit Gatô Cachorrô</title>
+<link href="estilo.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<img id="petImagem" width="18%" height="auto" style="float:left"/>
+	<section class="compras">
+		<h1 id="petNome"></h1>
+		<h1>R$ <span id="precoPet"></span></h1>
+		<section style="clear: both">
+			Descrição do pet:<br/>
+			<p id="idade"></p>
+			<p id="raca"></p>
+			<p id="pelagem"></p>
+			<p id="carac"></p>
+		</section>
+		<button id="comprar" onClick="adicionarCarrinho('pet', String(this.cod))">Comprar</button>
+	</section>
+	<br/>
+</body>
+</html>

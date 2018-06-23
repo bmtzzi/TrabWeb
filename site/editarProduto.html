@@ -1,0 +1,55 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Petit Gatô Cachorrô</title>
+<link href="estilo.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	Foto:
+	<img id="imagemCadastro" src="Imagens/pedigree-adulto-carne-e-vegetais-pacote-1-kg_200x200-PU5f8da_1.jpg" alt="produtoDefault" width="90px" height="90px"/>
+	<br/>
+	<br/>
+	<br/>
+	<form style="clear: both">
+		Alterar Foto:
+		<input id="inputImagemCadastro" type="file" onchange="alterouImagemCadastro(this)">
+		<br/>
+		<br/>
+		Nome:
+		<input id="nomeProduto" type="text" name="nomeProduto" value="Ração Pedigree Adulto Cães 3kg Frango">
+		<br/>
+		<br/>
+		Marca:
+		<input id="marcaProduto" type="text" name="marcaProduto" value="Golden">
+		<br/>
+		<br/>
+		Descrição:
+		<input id="descricaoProduto" type="text" name="descricaoProduto" value="Delicioso, seu cãozinho vai amar!!!">
+		<br/>
+		<br/>
+		Tipo:
+		<input id="tipoProduto" type="text" min="0" name="qtdProduto" value="159">
+		<br/>
+		<br/>
+		Preço:
+		<input id="precoProduto" type="text" name="precoProduto" value="30,00">
+		<br/>
+		<br/>
+		Quantidade em estoque:
+		<input id="qtEstoque" type="number" min="0" name="qtdProduto" value="238">
+	        <br/>
+		<br/>
+	        Quantidade vendida:
+		<input id="qtVendida" type="number" min="0" name="qtdProduto" value="159">
+		<br/>
+		<br/>
+		<br/>
+		<input type="button" value="Voltar" onClick="alterarPagina('listaProduto')"/>
+		<input type="button" value="Remover Cadastro" onClick="removerProduto(this.cod)"/>
+		<input type="button" value="Salvar" onClick="alterarCadastroProduto(this.cod)"/>
+	</form>
+	<br/>
+</body>
+</html>

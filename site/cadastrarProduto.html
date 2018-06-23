@@ -1,0 +1,46 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Petit Gatô Cachorrô</title>
+<link href="estilo.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	Foto:
+	<img src="Imagens/produto.png" alt="produtoDefault" width="90px" height="90px" id="fotoProduto"/>
+	<br/>
+	<br/>
+	<br/>
+	<form style="clear: both">
+		Nome:
+		<input type="text" name="nomeProduto" id="nomeProduto">
+		<br/>
+		<br/>
+		Tipo:
+		<input type="text" name="tipoProduto" id="tipoProduto">
+		<br/>
+		<br/>
+		Descrição:
+		<input type="text" name="descricaoProduto" id="descricaoProduto">
+		<br/>
+		<br/>
+		Preço:
+		<input type="text" name="precoProduto" id="precoProduto">
+		<br/>
+		<br/>
+		Marca:
+		<input type="text" name="marcaProduto" id="marcaProduto">
+		<br/>
+		<br/>
+		Quantidade em estoque:
+		<input type="number" min="0" name="qtdProduto" id="qtdProduto">
+		<br/>
+		<br/>
+		<br/>
+		<input type="button" value="Voltar"/>
+		<input type="button" onclick="cadastraProduto()" value="Salvar"/>
+	</form>
+	<br>
+</body>
+</html>
