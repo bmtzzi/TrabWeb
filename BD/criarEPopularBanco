@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+#################################################################
+#	Arquivo bash para criar e popular o Banco de Dados	#
+# necessário para o funcionamento do site Petit Gatô-Cachorrô.	#
+# O BD estará executando em paralelo ao servidor node.js e	#
+# receberá os comandos de manipulação de dados via requisições	#
+#		HTTP a partir do node.js.			#
+#################################################################
+
+# Cria a tabela produtos
+curl -X PUT http://localhost:5984/produtos
+
+# Popula a tabela produtos
+curl -X PUT '' http://localhost:5984/produtos -H "Content-Type:application/json"
+
+# Cria a tabela servicos
+curl -X PUT http://localhost:5984/servicos
+
+# Popula a tabela servicos
+curl -X PUT '' http://localhost:5984/servicos -H "Content-Type:application/json"
+
+# Cria a tabela pets_loja
+curl -X PUT http://localhost:5984/pets_loja
+
+# Popula a tabela pets_loja
+curl -X PUT '' http://localhost:5984/pets_loja -H "Content-Type:application/json"
+
+# Cria a tabela materias
+curl -X PUT http://localhost:5984/materias
+
+# Popula a tabela materias
+curl -X PUT '' http://localhost:5984/materias -H "Content-Type:application/json"
+
+# Cria a tabela adms
+curl -X PUT http://localhost:5984/adms
+
+# Popula a tabela adms
+curl -X PUT '' http://localhost:5984/adms -H "Content-Type:application/json"
+
+# Cria a tabela clientes
+curl -X PUT http://localhost:5984/clientes
+
+# vai pro diretório onde estão as imagens
+cd ../site/Imagens
+
+# Popula a tabela clientes
+# cliente Kleber
+rev=$((curl -X PUT -d '{"nome":"Kleber Xin", "endereco":"Rua das palmeiras, 851", "telefone":"1234.5678", "email":"kleber.xin@gmail.com", "login":"Kleber", "senha":"kleber"}' -H "Content-Type:application/json" http://localhost:5984/clientes/kleber) | cut -d "\"" -f10)
+
+# faz o attachment da foto do cliente kleber
+curl -X PUT -H "Content-Type:image/jpg" --data-binary @cliente.jpg http://localhost:5984/clientes/kleber/foto.jpg?rev=$rev
+
+# cliente jona
+rev=$((curl -X PUT -d '{"nome": "Joana Souza", "endereco": "Rua dos caquis, 57", "telefone": "5558-1234", "email": "joana.souza@gmail.com", "login": "joana", "senha": "joana"}' http://localhost:5984/clientes/joana -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da foto do cliente joana
+curl -X PUT -H "Content-Type:image/png" --data-binary @joana.png http://localhost:5984/clientes/joana/foto.png?rev=$rev
+
+# cliente wesley
+rev=$((curl -X PUT -d '{"nome": "Wesley Soares", "endereco": "Rua do rio, 1058", "telefone": "5658-1233", "email": "wesley.soares@gmail.com", "login": "wesley", "senha": "hehe"}' http://localhost:5984/clientes/wesley -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da foto do cliente wesley
+curl -X PUT -H "Content-Type:image/png" --data-binary @wesley.png http://localhost:5984/clientes/wesley/foto.png?rev=$rev
+
+# Cria a tabela agenda
+curl -X PUT http://localhost:5984/agenda
+
+# Popula a tabela agenda
+curl -X PUT '' http://localhost:5984/agenda -H "Content-Type:application/json"
+
+# Cria a tabela pets
+curl -X PUT http://localhost:5984/pets
+
+# Popula a tabela pets
+curl -X PUT '' http://localhost:5984/pets -H "Content-Type:application/json"
+
+# Cria a tabela carrinho
+curl -X PUT http://localhost:5984/carrinho
