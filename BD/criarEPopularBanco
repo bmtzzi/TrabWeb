@@ -7,72 +7,166 @@
 #		HTTP a partir do node.js.			#
 #################################################################
 
+# vai pro diretório onde estão as imagens necessárias para inclusão no banco de dados
+cd ../site/Imagens
+
 # Cria a tabela produtos
 curl -X PUT http://localhost:5984/produtos
 
 # Popula a tabela produtos
-curl -X PUT '' http://localhost:5984/produtos -H "Content-Type:application/json"
+# produto Ração pra gato Golden
+rev=$((curl -X PUT -d '{"nome":"Ração para gato", "tipo":"gato", "descricao":"Deixa seu gatinho bem alimentado!", "preco":"15.05", "marca":"Golden", "quantidadeEstoque":"50", "quantidadeVendida":"10"}' http://localhost:5984/produtos/1101 -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da foto do produto Ração pra gato Golden
+curl -X PUT -H "Content-Type:image/png" --data-binary @racao_golden_gatos_castrados_carne.png http://localhost:5984/produtos/1101/foto?rev=$rev
+
+# produto Ração pra cachorro Pedigree
+rev=$((curl -X PUT -d '{"nome":"Ração para cachorro", "tipo":"cachorro", "descricao":"Deixa seu cachorrinho bem alimentado!", "preco":"19.09", "marca":"Pedigree", "quantidadeEstoque":"40", "quantidadeVendida":"40"}' http://localhost:5984/produtos/1202 -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da foto do produto Ração pra cachorro Pedigree
+curl -X PUT -H "Content-Type:image/png" --data-binary @pedigree-adulto-carne-e-vegetais-pacote-1-kg_200x200-PU5f8da_1.jpg http://localhost:5984/produtos/1202/foto?rev=$rev
+
+# produto Ração pra pássaro Birdy
+rev=$((curl -X PUT -d '{"nome":"Ração para pássaro", "tipo":"pássaro", "descricao":"Deixa seu passarinho bem alimentado!", "preco":"18.08", "marca":"Birdy", "quantidadeEstoque":"80", "quantidadeVendida":"180"}' http://localhost:5984/produtos/1303 -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da foto do produto Ração pra pássaro Birdy
+curl -X PUT -H "Content-Type:image/png" --data-binary @racaoPassaro.jpg http://localhost:5984/produtos/1303/foto?rev=$rev
+
+# produto Ração pra lagarto Lizzy
+rev=$((curl -X PUT -d '{"nome":"Ração para lagarto", "tipo":"lagarto", "descricao":"Deixa seu lagartinho bem alimentado!", "preco":"17.07", "marca":"Lizzy", "quantidadeEstoque":"100", "quantidadeVendida":"30"}' http://localhost:5984/produtos/1404 -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o Lizzy attachment da foto do produto Ração pra lagarto Lizzy
+curl -X PUT -H "Content-Type:image/png" --data-binary @racaoLagarto.jpg http://localhost:5984/produtos/1404/foto?rev=$rev
+
+# produto Ração pra tartaruga Lentinha
+rev=$((curl -X PUT -d '{"nome":"Ração para tartaruga", "tipo":"tartaruga", "descricao":"Deixa sua tartaruguinha bem alimentada!", "preco":"16.06", "marca":"Lentinha", "quantidadeEstoque":"70", "quantidadeVendida":"20"}' http://localhost:5984/produtos/1505 -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o Lizzy attachment da foto do produto Ração pra tartaruga Lentinha
+curl -X PUT -H "Content-Type:image/png" --data-binary @racaoTartaruga.jpg http://localhost:5984/produtos/1505/foto?rev=$rev
 
 # Cria a tabela servicos
 curl -X PUT http://localhost:5984/servicos
 
 # Popula a tabela servicos
-curl -X PUT '' http://localhost:5984/servicos -H "Content-Type:application/json"
+# serviço vacina de raiva
+rev=$((curl -X PUT -d '{"nome":"Vacina de raiva", "tipo":"veterinário", "descricao":"Deixa seu cachorrinho tranquilo!", "preco":"30.09", "marca":"Vacina Boa", "alt":"Imagem de um cachorro recebendo vacina"}' http://localhost:5984/servicos/1202 -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da foto do serviço vacina de raiva
+curl -X PUT -H "Content-Type:image/png" --data-binary @Vacinacao-de-Animais.jpg http://localhost:5984/servicos/1202/foto?rev=$rev
+
+# serviço banho
+rev=$((curl -X PUT -d '{"nome":"banho", "tipo":"estética", "descricao":"Deixa seu gatinho cheiroso!", "preco":"18.08", "alt":"Imagem de um gato tomando banho"}' http://localhost:5984/servicos/1303 -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da foto do serviço banho
+curl -X PUT -H "Content-Type:image/png" --data-binary @banho-gato.jpg http://localhost:5984/servicos/1303/foto?rev=$rev
 
 # Cria a tabela pets_loja
 curl -X PUT http://localhost:5984/pets_loja
 
 # Popula a tabela pets_loja
-curl -X PUT '' http://localhost:5984/pets_loja -H "Content-Type:application/json"
+# pets_loja Xinguin
+rev=$((curl -X PUT -d '{"nome":"Xinguin", "tipo":"gato", "descricao":"Carinhosa!", "preco":"4000.00", "idade":"1 ano e 6 meses", "raca":"Vira-lata", "pelagem":"curta tricolor"}' http://localhost:5984/pets_loja/1101 -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment do pets_loja Xinguin
+curl -X PUT -H "Content-Type:image/png" --data-binary @xinguin.jpg http://localhost:5984/pets_loja/1101/foto?rev=$rev
 
 # Cria a tabela materias
 curl -X PUT http://localhost:5984/materias
 
 # Popula a tabela materias
-curl -X PUT '' http://localhost:5984/materias -H "Content-Type:application/json"
+# materia 1101
+rev=$((curl -X PUT -d '{"titulo":"Nova ração chega à loja :D", "conteudo":"Uma nova ração acaba de chegar em nossa loja online, estamos falando da Pedigree, é mais uma opção deliciosa e nutritiva que trazemos a você, nosso cliente, para deixar seus animais mais saudáveis. Eu sei que este texto deveria ser mais comprido para parecer uma matéria real de um blog, mas não estou com tanta criatividade assim para escrever um monte de linhas sobre \"nova ração pode ser comprada em nossa loja\"."}' http://localhost:5984/materias/1101 -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da materia 1101
+curl -X PUT -H "Content-Type:image/png" --data-binary @pedigree-adulto-carne-e-vegetais-pacote-1-kg_200x200-PU5f8da_1.jpg http://localhost:5984/materias/1101/foto?rev=$rev
+
+# materia 1202
+rev=$((curl -X PUT -d '{"titulo":"Novo gatinho chega à loja :D", "foto":"Imagens/pedigree-adulto-carne-e-vegetais-pacote-1-kg_200x200-PU5f8da_1.jpg", "conteudo":"Uma nova gatinha acaba de chegar em nossa loja online, estamos falando da Xinguin, uma gatinha tricolor linda, cheia de energia e carinho. Eu sei que este texto deveria ser mais comprido para parecer uma matéria real de um blog, mas não estou com tanta criatividade assim para escrever um monte de linhas sobre \"nova gatinha pode ser comprada em nossa loja\"."}' http://localhost:5984/materias/1202 -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da materia 1202
+curl -X PUT -H "Content-Type:image/png" --data-binary @xinguin.jpg http://localhost:5984/materias/1202/foto?rev=$rev
 
 # Cria a tabela adms
 curl -X PUT http://localhost:5984/adms
 
 # Popula a tabela adms
-curl -X PUT '' http://localhost:5984/adms -H "Content-Type:application/json"
+# adm admin
+rev=$((curl -X PUT -d '{"nome":"Roberto Xin", "telefone":"5678-1234", "email":"rob.xin@gmail.com", "login":"admin", "senha":"admin"}' http://localhost:5984/adms/admin -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da foto do adm admin
+curl -X PUT -H "Content-Type:image/jpg" --data-binary @adm.jpg http://localhost:5984/adms/admin/foto?rev=$rev
+
+# adm claudia
+rev=$((curl -X PUT -d '{"nome":"Claudia Souza", "telefone":"5578-1234", "email":"claudia.souza@gmail.com", "login":"claudia", "senha":"claudia"}' http://localhost:5984/adms/claudia -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da foto do adm claudia
+curl -X PUT -H "Content-Type:image/png" --data-binary @claudia.png http://localhost:5984/adms/claudia/foto?rev=$rev
+
+# adm joaquim
+rev=$((curl -X PUT -d '{"nome":"Joaquim Soares", "telefone":"5678-1233", "email":"joaquim.soares@gmail.com", "login":"joaquim", "senha":"jojo"}' http://localhost:5984/adms/joaquim -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da foto do adm joaquim
+curl -X PUT -H "Content-Type:image/png" --data-binary @joaquim.png http://localhost:5984/adms/joaquim/foto?rev=$rev
 
 # Cria a tabela clientes
 curl -X PUT http://localhost:5984/clientes
-
-# vai pro diretório onde estão as imagens
-cd ../site/Imagens
 
 # Popula a tabela clientes
 # cliente Kleber
 rev=$((curl -X PUT -d '{"nome":"Kleber Xin", "endereco":"Rua das palmeiras, 851", "telefone":"1234.5678", "email":"kleber.xin@gmail.com", "login":"Kleber", "senha":"kleber"}' -H "Content-Type:application/json" http://localhost:5984/clientes/kleber) | cut -d "\"" -f10)
 
 # faz o attachment da foto do cliente kleber
-curl -X PUT -H "Content-Type:image/jpg" --data-binary @cliente.jpg http://localhost:5984/clientes/kleber/foto.jpg?rev=$rev
+curl -X PUT -H "Content-Type:image/jpg" --data-binary @cliente.jpg http://localhost:5984/clientes/kleber/foto?rev=$rev
 
 # cliente jona
 rev=$((curl -X PUT -d '{"nome": "Joana Souza", "endereco": "Rua dos caquis, 57", "telefone": "5558-1234", "email": "joana.souza@gmail.com", "login": "joana", "senha": "joana"}' http://localhost:5984/clientes/joana -H "Content-Type:application/json") | cut -d "\"" -f10)
 
 # faz o attachment da foto do cliente joana
-curl -X PUT -H "Content-Type:image/png" --data-binary @joana.png http://localhost:5984/clientes/joana/foto.png?rev=$rev
+curl -X PUT -H "Content-Type:image/png" --data-binary @joana.png http://localhost:5984/clientes/joana/foto?rev=$rev
 
 # cliente wesley
 rev=$((curl -X PUT -d '{"nome": "Wesley Soares", "endereco": "Rua do rio, 1058", "telefone": "5658-1233", "email": "wesley.soares@gmail.com", "login": "wesley", "senha": "hehe"}' http://localhost:5984/clientes/wesley -H "Content-Type:application/json") | cut -d "\"" -f10)
 
 # faz o attachment da foto do cliente wesley
-curl -X PUT -H "Content-Type:image/png" --data-binary @wesley.png http://localhost:5984/clientes/wesley/foto.png?rev=$rev
-
-# Cria a tabela agenda
-curl -X PUT http://localhost:5984/agenda
-
-# Popula a tabela agenda
-curl -X PUT '' http://localhost:5984/agenda -H "Content-Type:application/json"
+curl -X PUT -H "Content-Type:image/png" --data-binary @wesley.png http://localhost:5984/clientes/wesley/foto?rev=$rev
 
 # Cria a tabela pets
 curl -X PUT http://localhost:5984/pets
 
 # Popula a tabela pets
-curl -X PUT '' http://localhost:5984/pets -H "Content-Type:application/json"
+# pet Maya
+rev=$((curl -X PUT -d '{"nome":"Maya", "cliente":"kleber", "raca":"Vira-lata", "idade":"2 meses"}' http://localhost:5984/pets/1101 -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da foto do pet Maya
+curl -X PUT -H "Content-Type:image/jpg" --data-binary @maya.jpg http://localhost:5984/pets/1101/foto?rev=$rev
+
+# pet Mica
+rev=$((curl -X PUT -d '{"nome":"Mica", "cliente":"kleber", "raca":"Vira-lata", "idade":"8 meses"}' http://localhost:5984/pets/1102 -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da foto do pet Mica
+curl -X PUT -H "Content-Type:image/jpg" --data-binary @mica.jpg http://localhost:5984/pets/1102/foto?rev=$rev
+
+# pet Pink
+rev=$((curl -X PUT -d '{"nome":"Pink", "cliente":"kleber", "raca":"Pinscher", "idade":"5 meses"}' http://localhost:5984/pets/1103 -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da foto do pet Pink
+curl -X PUT -H "Content-Type:image/jpg" --data-binary @pink.jpg http://localhost:5984/pets/1103/foto?rev=$rev
+
+# pet Xinguin
+rev=$((curl -X PUT -d '{"nome":"Xinguin", "cliente":"kleber", "raca":"Vira-lata", "idade":"1 ano e 6 meses"}' http://localhost:5984/pets/1104 -H "Content-Type:application/json") | cut -d "\"" -f10)
+
+# faz o attachment da foto do pet Pink
+curl -X PUT -H "Content-Type:image/jpg" --data-binary @xinguin.jpg http://localhost:5984/pets/1104/foto?rev=$rev
+
+# Cria a tabela agenda
+curl -X PUT http://localhost:5984/agenda
+
+# Popula a tabela agenda
+# agendamento 1101
+curl -X PUT -d '{"cliente":"kleber", "pet":"1101", "data":"22/05/2018", "hora":"10:00", "servico":"1202"}' http://localhost:5984/agenda/1101 -H "Content-Type:application/json"
+
+# agendamento 1102
+curl -X PUT -d '{"cliente":"kleber", "pet":"1101", "data":"22/05/2018", "hora":"15:00", "servico":"1303"}' http://localhost:5984/agenda/1102 -H "Content-Type:application/json"
 
 # Cria a tabela carrinho
 curl -X PUT http://localhost:5984/carrinho
