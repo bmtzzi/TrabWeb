@@ -1,0 +1,27 @@
+{
+  "name": "trabweb",
+  "version": "1.0.0",
+  "description": "SPA de Pet Shop, trabalho final de Web.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bmtzzi/TrabWeb.git"
+  },
+  "keywords": [
+    "SPA",
+    "Pet",
+    "Shop"
+  ],
+  "author": "bmtzzi, Cepollaro, igor-motta",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/bmtzzi/TrabWeb/issues"
+  },
+  "homepage": "https://github.com/bmtzzi/TrabWeb#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
