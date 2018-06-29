@@ -21,6 +21,25 @@
 	});
 };
 
+﻿const consultarBanco = (pagina) => {
+	return new Promise( (resolve, reject) => {
+		const xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = () => {
+			if (xhttp.readyState == 4) {
+			if(xhttp.status == 200){
+				// Typical action to be performed when the document is ready:
+				console.log("carregou " + pagina);setTimeout(() => {
+				resolve(xhttp.responseText);}, 1000);
+			} else{
+				reject(xhttp.status);
+			}
+	    	}
+		};
+		xhttp.open("GET", pagina, true);
+		xhttp.send();
+	});
+};
+
 const alterarPagina = (...pagina) => {
 	console.log("alterou página");
 	let antigoSelecionado = document.getElementById("navLateral");
@@ -109,7 +128,8 @@ const alterarPagina = (...pagina) => {
 				if(selecionado){
 					selecionado.className = "active";
 				}
-				gerarConteudo(null, "loja");
+				atualizarElemento(document.getElementById('produtos'), 'loja');
+//				gerarConteudo(null, "loja");
 			});
 			break;
 		case "servicos":
@@ -122,7 +142,8 @@ const alterarPagina = (...pagina) => {
 				if(selecionado){
 					selecionado.className = "active";
 				}
-				gerarConteudo(null, "servicosTodos");
+				atualizarElemento(document.getElementById('servicos'), 'servicosTodos');
+//				gerarConteudo(null, "servicosTodos");
 			});
 			break;
 		case "editarProduto":
@@ -142,7 +163,8 @@ const alterarPagina = (...pagina) => {
 				if(selecionado){
 					selecionado.className = "active";
 				}
-				gerarConteudo(null, "petsLoja");
+				atualizarElemento(document.getElementById('petsLoja'), 'pets_loja');
+//				gerarConteudo(null, "petsLoja");
 			});
 			break;
 		case "blog":
@@ -155,7 +177,8 @@ const alterarPagina = (...pagina) => {
 				if(selecionado){
 					selecionado.className = "active";
 				}
-				gerarConteudo(null, "blog");
+				atualizarElemento(document.getElementById('blog'), 'blog');
+//				gerarConteudo(null, "blog");
 			});
 			break;
 		case "carrinho":
@@ -177,7 +200,14 @@ const alterarPagina = (...pagina) => {
 				if(selecionado[0]){
 					selecionado[0].className = "";
 				}console.log("bd = ---------------");console.log(db);
-				gerarConteudo(null, "paginaPrincipal");
+				atualizarElemento(document.getElementById('homeProd'), 'loja_home').then( result => {
+					atualizarElemento(document.getElementById('homeServ'), 'servicosTodos_home').then(result => {
+						atualizarElemento(document.getElementById('homePets'), 'pets_loja_home').then(result => {
+							atualizarElemento(document.getElementById('homeBlog'), 'blog_home');
+						});
+					});
+				});
+//				gerarConteudo(null, "paginaPrincipal");
 			});
 			break;
 		case "finalizarCompra":
