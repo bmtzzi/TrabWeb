@@ -1,0 +1,12 @@
+for i in pets
+   figure(
+          class="loja"
+          onClick="alterarPagina('pet', '" + i.chave + "')"
+         )
+      img(
+          src=("pets_loja/" + i.chave + "/foto")
+          alt=(i.nome)
+          width='200px'
+          height='200px'
+         )
+      figcaption #{i.nome}

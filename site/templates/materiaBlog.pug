@@ -1,0 +1,14 @@
+for i in materias
+   section(
+           onClick="alterarPagina('materia', '" + i.chave + "')"
+           class='materia'
+           style='display: inline-block;text-align:center;margin: 15px 20px;'
+          )
+      figure(class="figuraMateria")
+         img(
+             src=("pets_loja/" + i.chave + "/foto")
+             alt=(i.titulo)
+             width='200px'
+             height='200px'
+            )
+      figcaption #{i.titulo}

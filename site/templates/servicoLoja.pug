@@ -1,0 +1,12 @@
+for i in servicos
+   figure(
+          class="loja"
+          onClick="alterarPagina('servico', '" + i.chave + "')"
+         )
+      img(
+          src=("servicos/" + i.chave + "/foto")
+          alt=(i.descricao)
+          width='153px'
+          height='102px'
+         )
+      figcaption #{i.descricao}
