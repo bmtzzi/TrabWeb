@@ -4,15 +4,15 @@
 			const xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = () => {
 				if (xhttp.readyState == 4) {
-				if(xhttp.status == 200){
-					// Typical action to be performed when the document is ready:
-					destino.innerHTML = xhttp.responseText;
-					console.log("carregou " + pagina);setTimeout(() => {
-					resolve();}, 1000);
-				} else{
-					alert("Erro " + xhttp.status);
-				}
-		    	}
+					if(xhttp.status == 200){
+						// Typical action to be performed when the document is ready:
+						destino.innerHTML = xhttp.responseText;
+						console.log("carregou " + pagina);setTimeout(() => {
+						resolve();}, 1000);
+					} else{
+						alert("Erro: " + xhttp.statusText + "(" + xhttp.status + ")");
+					}
+			    	}
 			};
 			xhttp.open("GET", pagina, true);
 			xhttp.send();
@@ -21,22 +21,74 @@
 	});
 };
 
-﻿const consultarBanco = (pagina) => {
+const atualizarElementoAutenticado = (destino, pagina) => {
+	return new Promise( (resolve, reject) => {
+		if(destino){
+			const xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = () => {
+				if (xhttp.readyState == 4) {
+					if(xhttp.status == 200){
+						// Typical action to be performed when the document is ready:
+						destino.innerHTML = xhttp.responseText;
+						console.log("carregou " + pagina);setTimeout(() => {
+						resolve();}, 1000);
+					} else{
+						alert("Erro: " + xhttp.statusText + "(" + xhttp.status + ")");
+					}
+			    	}
+			};
+			xhttp.open("POST", pagina, true);
+			xhttp.setRequestHeader("Content-Type", "application/json");
+			xhttp.send(JSON.stringify({chave:document.getElementById('welcome').cod}));
+		}
+		else reject(Error("Destino invalido"));
+	});
+};
+
+/*
+﻿const consultarBanco = (banco, chave) => {
 	return new Promise( (resolve, reject) => {
 		const xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = () => {
 			if (xhttp.readyState == 4) {
-			if(xhttp.status == 200){
-				// Typical action to be performed when the document is ready:
-				console.log("carregou " + pagina);setTimeout(() => {
-				resolve(xhttp.responseText);}, 1000);
-			} else{
-				reject(xhttp.status);
-			}
-	    	}
+				if(xhttp.status == 200){
+					// Typical action to be performed when the document is ready:
+					console.log("carregou " + pagina);setTimeout(() => {
+					resolve(xhttp.responseText);}, 1000);
+				} else{
+					reject("Erro " + xhttp.statusText + "(" + xhttp.status + ")");
+				}
+		    	}
 		};
-		xhttp.open("GET", pagina, true);
+		xhttp.open("GET", banco + "/" + chave, true);
 		xhttp.send();
+	});
+};
+*/
+
+const autenticarNoBanco = (loginL, senhaL) => {
+	return new Promise( (resolve, reject) => {
+		const xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = () => {
+			if (xhttp.readyState == 4) {
+				if(xhttp.status == 200){
+					// Typical action to be performed when the document is ready:
+					console.log("autenticou " + xhttp.responseText);
+					if(xhttp.responseText != ""){
+						document.getElementById("navCima").innerHTML = xhttp.responseText;
+						resolve(true);
+					}
+					else{
+						reject("Usuário ou senha inválidos.");
+					}
+				} else{
+					reject("Erro " + xhttp.statusText + "(" + xhttp.status + ")");
+				}
+		    	}
+		};
+		xhttp.open("POST", "autenticar_no_banco", true);
+		xhttp.setRequestHeader("Content-Type", "application/json");
+		xhttp.send(JSON.stringify({login:loginL, senha:senhaL}));
 	});
 };
 
@@ -97,26 +149,10 @@ const alterarPagina = (...pagina) => {
 			}
 			break;
 		case "loginClienteSucesso":
-			if(pagina[1]){
-				return atualizarElemento(document.getElementsByTagName("main")[0], "loginCliente.html");
-			}
-			else{
-				return Promise.all([
-					atualizarElemento(document.getElementsByTagName("main")[0], "loginCliente.html"),
-					atualizarElemento(document.getElementById("navCima"), "navCima.html")
-				]);
-			}
+			return atualizarElemento(document.getElementsByTagName("main")[0], "loginCliente.html");
 			break;
 		case "loginAdminSucesso":
-			if(pagina[1]){
-				return atualizarElemento(document.getElementsByTagName("main")[0], "loginAdm.html");
-			}
-			else{
-				return Promise.all([
-					atualizarElemento(document.getElementsByTagName("main")[0], "loginAdm.html"),
-					atualizarElemento(document.getElementById("navCima"), "navCima.html")
-				]);
-			}
+			return atualizarElemento(document.getElementsByTagName("main")[0], "loginAdm.html");
 			break;
 		case "loja":
 			atualizarElemento(document.getElementsByTagName("main")[0], "loja.html").then( result => {
@@ -215,18 +251,18 @@ const alterarPagina = (...pagina) => {
 			break;
 		case "cadastroCliente":
 			selecionado = document.getElementById("mainCliente");
-			atualizarElemento(selecionado, "cadastroCliente.html").then( result => {
+			atualizarElementoAutenticado(selecionado, "cadastroCliente.html").then( result => {
 				selecionado.className = "secCadastraCliente";
 				selecionado = document.getElementById("cadastroCliente");
 				if(selecionado){
 					selecionado.className = "active";
 				}
-				if(pagina[1]){
-					gerarConteudo(pagina[1], "cadastroCliente");
-				}
-				else{
-					gerarConteudo(document.getElementById("welcome").cod, "cadastroCliente");
-				}
+//				if(pagina[1]){
+//					gerarConteudo(pagina[1], "cadastroCliente");
+//				}
+//				else{
+//					gerarConteudo(document.getElementById("welcome").cod, "cadastroCliente");
+//				}
 			});
 			break;
 		case "cadastroClienteAdm":
@@ -398,7 +434,7 @@ const mostrarMateria = (materia) => {
 // TODO tem que decidir se vai ser feito assim mesmo
 const mostrarProduto = (produto) => atualizarElemento(document.getElementsByTagName("main")[0], produto + ".html");
 
-const autenticar = () => {
+const autenticar = async () => {
 	const login = document.getElementById("login").value;
 	const senha = document.getElementById("senha").value;
 
@@ -411,49 +447,17 @@ const autenticar = () => {
 			main.innerHTML = "<h4 style='text-align:center;color:red;'>Login é um campo obrigatório</h4>" + main.innerHTML;
 		}
 	}
-
-	var tabelaCliente = db.transaction("cliente").objectStore("cliente");
-	var nome = "";
-
-	tabelaCliente.openCursor().onsuccess = (event) => {
-		var cursorC = event.target.result;
-		if(cursorC){
-			if(cursorC.value.login == login && cursorC.value.senha == senha){
-				alterarPagina("loginClienteSucesso", false).then( result => {
-					nome = cursorC.value.nome;
-					let welcome = document.getElementById("welcome");
-					welcome.innerHTML = "Olá, " + nome + " :D";
-					welcome.cod = cursorC.value.cod;
-					welcome.pagina = "loginClienteSucesso";
-				});
-				return;
-			}
-		cursorC.continue();
-		}
-		else{
-			var tabelaAdm = db.transaction("adm").objectStore("adm");
-			tabelaAdm.openCursor().onsuccess = (event) => {
-				var cursorA = event.target.result;
-				if(cursorA){console.log(cursorA.value.nome);
-					if(cursorA.value.login == login && cursorA.value.senha == senha){
-						alterarPagina("loginAdminSucesso", false).then( result => {
-							nome = cursorA.value.nome;
-							let welcome = document.getElementById("welcome");
-							welcome.innerHTML = "Olá, " + nome + " :D";
-							welcome.cod = cursorA.value.cod;
-							welcome.pagina = "loginAdminSucesso";
-							document.getElementById("botaoCarrinho").style.display = "none";
-						});
-						return;
-					}
-				cursorA.continue();
-				}
-				else{
-					alert("Usuário ou senha incorreto.");
-				}
+	else{
+		try{
+			let cliente = (await autenticarNoBanco(login, senha));
+			if(cliente){
+				alterarPagina(document.getElementById('welcome').getAttribute('pagina'));
 			}
 		}
-	};
+		catch{
+			alert("Usuário ou senha incorreto.");
+		}
+	}
 };
 
 const sair = () => {

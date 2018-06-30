@@ -1,0 +1,17 @@
+﻿doctype html
+html
+   head
+      meta(charset="utf-8")
+      title Petit Gatô Cachorrô
+      link(href="estilo.css" rel="stylesheet" type="text/css")
+
+   body
+      a(id="navCimaLoja" onClick="alterarPagina('loja')") Loja
+      a(id="navCimaServicos" onClick="alterarPagina('servicos')") Serviços
+      a(id="navCimaPets" onClick="alterarPagina('pets')") Pets
+      a(id="navCimaBlog" onClick="alterarPagina('blog')") Blog
+      a(id="navCimaSair" style="float:right" onClick="sair()") Sair
+      if(cliente)
+         h5(id="welcome" onClick="alterarPagina(this.pagina)" cod= chave pagina="loginClienteSucesso") Olá, #{nome} =D
+      else
+         h5(id="welcome" onClick="alterarPagina(this.pagina)" cod= chave pagina="loginAdminSucesso") Olá, #{nome} =D
