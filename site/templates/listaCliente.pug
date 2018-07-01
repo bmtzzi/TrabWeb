@@ -1,0 +1,9 @@
+body
+	button(onClick="alterarPagina('cadastrarCliente')") + Cadastrar novo cliente
+	br
+	br
+	br
+	ul(id="listaClientes")
+		for i in listaClientes
+			li(onClick="alterarPagina('cadastroClienteAdm', " + i.chave + ")") #{i.nome}
+	br

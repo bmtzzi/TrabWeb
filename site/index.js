@@ -226,6 +226,29 @@ app.get('/blog(_home)?', async (req, res)=>{
    res.render('materiaBlog', {materias: lista});
 });
 
+// roteia a lista de clientes para o administrador
+app.get('/listaCliente.html', async (req, res)=>{
+
+   let response = "";
+   couchdb.database('clientes');
+   let clientes = (await couchGet('_all_docs')).body.rows;
+   const lista = [];
+
+   for(let i in clientes){
+      try{
+         let cliente = (await couchGet(clientes[i].key)).body;
+         if(cliente._id){
+            lista[i] = {
+               nome: cliente.nome
+            };
+         }
+      } catch (exception){
+         console.log(exception);
+      }
+   }
+   res.render('listaCliente', {listaClientes: lista});
+});
+
 // cria o servidor
 const server = app.listen(8081, ()=>{
    let host = server.address().address

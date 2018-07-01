@@ -6,33 +6,33 @@ head
    link(href="estilo.css" rel="stylesheet" type="text/css")
 
 body
-      Foto:
+      | Foto:
       img(id="imagemCadastro" src="clientes/#{c.key}/foto" alt="foto do cliente" width="110px" height="128px")
       br
       br
       br
       form(style="clear: both")
-         Alterar Foto:
+         | Alterar Foto:
          input(id="inputImagemCadastro" type="file" onchange="alterouImagemCadastro(this)")
          br
          br
-         Nome:
+         | Nome:
          input(id="nomeCliente" type="text" name="cadastroCliente" value=c.nome)
          br
          br
-         Endereço:
+         | Endereço:
          input(id="enderecoCliente" type="text" name="enderecoCliente" value=c.endereco)
          br
          br
-         Telefone:
+         | Telefone:
          input(id="telefoneCliente" type="tel" name="telefoneCliente" value=c.telefone)
          br
          br
-         E-mail:
+         | E-mail:
          input(id="emailCliente" type="email" name="emailCliente" value=c.email)
          br
          br
          br
          input(id="voltar" type="button" onClick="alterarPagina('loginClienteSucesso', String(this.cod))" value="Voltar" style="display: none;" cod=c.key)
          input(id="salvar" type="button" onClick="alterarCadastroCliente(this.cod, false)" value="Salvar" cod=c.key)
-	br
+         br
