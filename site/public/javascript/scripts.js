@@ -21,7 +21,7 @@
 	});
 };
 
-const atualizarElementoAutenticado = (destino, pagina) => {
+const atualizarElementoAutenticado = (destino, pagina, idSec) => {
 	return new Promise( (resolve, reject) => {
 		if(destino){
 			const xhttp = new XMLHttpRequest();
@@ -39,32 +39,66 @@ const atualizarElementoAutenticado = (destino, pagina) => {
 			};
 			xhttp.open("POST", pagina, true);
 			xhttp.setRequestHeader("Content-Type", "application/json");
-			xhttp.send(JSON.stringify({chave:document.getElementById('welcome').cod}));
+			xhttp.send(JSON.stringify({chave:document.getElementById('welcome').getAttribute('cod'), chave2: idSec}));
 		}
 		else reject(Error("Destino invalido"));
 	});
 };
 
-/*
-﻿const consultarBanco = (banco, chave) => {
+
+﻿const addBanco = (banco, chave, jsonBody) => {
 	return new Promise( (resolve, reject) => {
 		const xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = () => {
 			if (xhttp.readyState == 4) {
 				if(xhttp.status == 200){
-					// Typical action to be performed when the document is ready:
-					console.log("carregou " + pagina);setTimeout(() => {
-					resolve(xhttp.responseText);}, 1000);
+					resolve(xhttp.responseText);
 				} else{
 					reject("Erro " + xhttp.statusText + "(" + xhttp.status + ")");
 				}
 		    	}
 		};
-		xhttp.open("GET", banco + "/" + chave, true);
+		xhttp.open("PUT", banco + "/" + chave, true);
+		xhttp.setRequestHeader("Content-Type", "application/json");
+		xhttp.send(jsonBody);
+	});
+};
+
+const alterarBanco = (banco, chave, jsonBody) => {
+	return new Promise( (resolve, reject) => {
+		const xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = () => {
+			if (xhttp.readyState == 4) {
+				if(xhttp.status == 200){
+					resolve(xhttp.responseText);
+				} else{
+					reject("Erro " + xhttp.statusText + "(" + xhttp.status + ")");
+				}
+		    	}
+		};console.log("vai pro servidor");
+		xhttp.open("POST", banco + "/" + chave, true);
+		xhttp.setRequestHeader("Content-Type", "application/json");
+		xhttp.send(jsonBody);
+	});
+};
+
+const removeBanco = (banco, chave) => {
+	return new Promise( (resolve, reject) => {
+		const xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = () => {
+			if (xhttp.readyState == 4) {
+				if(xhttp.status == 200){
+					resolve(xhttp.responseText);
+				} else{
+					reject("Erro " + xhttp.statusText + "(" + xhttp.status + ")");
+				}
+		    	}
+		};
+		xhttp.open("DELETE", banco + "/" + chave, true);
 		xhttp.send();
 	});
 };
-*/
+
 
 const autenticarNoBanco = (loginL, senhaL) => {
 	return new Promise( (resolve, reject) => {
@@ -93,7 +127,6 @@ const autenticarNoBanco = (loginL, senhaL) => {
 };
 
 const alterarPagina = (...pagina) => {
-	console.log("alterou página");
 	let antigoSelecionado = document.getElementById("navLateral");
 	if(antigoSelecionado){
 		antigoSelecionado = antigoSelecionado.getElementsByTagName("a");
@@ -249,7 +282,7 @@ const alterarPagina = (...pagina) => {
 		case "finalizarCompra":
 			atualizarElemento(document.getElementsByTagName("main")[0], "finalizarCompra.html");
 			break;
-		case "cadastroCliente":console.log("entrou no cadastro cliente");
+		case "cadastroCliente":
 			selecionado = document.getElementById("mainCliente");
 			atualizarElementoAutenticado(selecionado, "cadastroCliente.html").then( result => {
 				selecionado.className = "secCadastraCliente";
@@ -266,14 +299,13 @@ const alterarPagina = (...pagina) => {
 			});
 			break;
 		case "cadastroClienteAdm":
-			selecionado = document.getElementById("mainAdm");console.log("mainAdm--------------");console.log(selecionado);
-			atualizarElemento(selecionado, "cadastroClienteAdm.html").then( result => {
+			selecionado = document.getElementById("mainAdm");
+			atualizarElementoAutenticado(selecionado, "cadastroClienteAdm.html", pagina[1]).then( result => {
 				selecionado.className = "secCadastraCliente";
 				selecionado = document.getElementById("cadastroCliente");
 				if(selecionado){
 					selecionado.className = "active";
 				}
-				gerarConteudo(pagina[1], "cadastroCliente", true);
 			});
 			break;
 
@@ -351,9 +383,7 @@ const alterarPagina = (...pagina) => {
 			break;
 		case "listaCliente":
 			selecionado = document.getElementById("mainAdm");
-			atualizarElemento(selecionado, "listaCliente.html").then( result => {
-				gerarConteudo(null, pagina[0]);
-			});
+			atualizarElemento(selecionado, "listaCliente.html");
 			selecionado.className = "secCadastraCliente";
 			selecionado = document.getElementById("listaCliente");
 			if(selecionado){
@@ -467,21 +497,25 @@ const sair = () => {
 
 const cadastrarCliente = async () => {
 	let srcFoto = await getCaminhoDoArquivo(document.getElementById("inputImagemCadastro"));
-	let tabelaCliente = db.transaction("cliente", "readwrite").objectStore("cliente");
 	
-	tabelaCliente.add({
-			nome: document.getElementById("cadastroCliente").value,
-			endereco: document.getElementById("enderecoCliente").value,
-			telefone: document.getElementById("telefoneCliente").value,
-			email: document.getElementById("emailCliente").value,
-			login: document.getElementById("loginCliente").value,
-			senha: document.getElementById("senhaCliente").value,
-			foto: srcFoto
-		}).onsuccess = () => {
-			console.log("Cliente cadastrado!");
-			alert("Cliente cadastrado com sucesso.");
-			alterarPagina("listaCliente");
-		};
+	let cliente = await addBanco("clientes", document.getElementById("loginCliente").value, JSON.stringify({
+		nome: document.getElementById("nomeCliente").value,
+		endereco: document.getElementById("enderecoCliente").value,
+		telefone: document.getElementById("telefoneCliente").value,
+		email: document.getElementById("emailCliente").value,
+		login: document.getElementById("loginCliente").value,
+		senha: document.getElementById("senhaCliente").value,
+		
+	}));
+
+	if(JSON.parse(cliente).ok){
+		//TODO fazer attachment da foto	usando response do addbanco	
+		//foto: srcFoto
+		alterarPagina("listaCliente");
+		alert("Cliente cadastrado com sucesso!");
+	}else{
+		alert("Usuário já existe");
+	}	
 };
 
 const cadastrarAdm = async () => {
@@ -507,6 +541,17 @@ const removerCadastroAdm = (cod) => {
 		alert("Administrador removido com sucesso");
 		alterarPagina("listaAdm");
 	};
+};
+
+const removerCadastro = async (banco, cod) => {
+console.log("cod: " + cod);
+	var response = await removeBanco(banco, cod);
+	if(JSON.parse(response).ok){	
+		alterarPagina("listaCliente");		
+		alert("Cliente removido com sucesso");		
+	}else{
+		alert("Algo deu errado");
+	}
 };
 
 const cadastrarProduto = async () => {
@@ -563,11 +608,11 @@ const cadastrarPet = async (cod) => {
 		}
 };
 
-const alterarCadastroCliente = async (cod, isAdm) => {console.log("vai alterar dados do cliente");
-	let foto = await getCaminhoDoArquivo(document.getElementById("inputImagemCadastro"));
-	let objectStore = db.transaction("cliente", "readwrite").objectStore("cliente");
-	let request = objectStore.get(cod);
-	request.onsuccess = (e) => {
+const alterarCadastroCliente = async (banco, cod, isAdm) => {console.log("vai alterar dados do cliente");
+	//let foto = await getCaminhoDoArquivo(document.getElementById("inputImagemCadastro"));
+	//let objectStore = db.transaction("cliente", "readwrite").objectStore("cliente");
+	//let request = objectStore.get(cod);
+	/*request.onsuccess = (e) => {
 		let tupla = request.result;
 		if(foto != null){
 			tupla.foto = foto;
@@ -601,7 +646,26 @@ const alterarCadastroCliente = async (cod, isAdm) => {console.log("vai alterar d
 		requestUpdate.onerror = (e) => {
 			alert("Dados não puderam ser atualizados, tente novamente mais tarde.");
 		};
-	};
+	};*/
+	let srcFoto = await getCaminhoDoArquivo(document.getElementById("inputImagemCadastro"));
+	
+	let cliente = await alterarBanco(banco, cod, JSON.stringify({
+		nome: document.getElementById("nomeCliente").value,
+		endereco: document.getElementById("enderecoCliente").value,
+		telefone: document.getElementById("telefoneCliente").value,
+		email: document.getElementById("emailCliente").value,
+		login: cod
+		//senha: document.getElementById("senhaCliente").value,
+	}));
+
+	if(JSON.parse(cliente).ok){
+		//TODO fazer attachment da foto	usando response do addbanco	
+		//foto: srcFoto
+		alterarPagina("listaCliente");
+		alert("Cliente cadastrado com sucesso!");
+	}else{
+		alert("Usuário já existe");
+	}	
 };
 
 const alterarCadastroAdm = async (cod) => {console.log("vai alterar dados do admin");

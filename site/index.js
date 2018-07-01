@@ -1,6 +1,9 @@
 const couchdb = require('couchdb-request')('http://localhost:5984');
 const util = require('util');
 const couchGet = util.promisify(couchdb.get);
+const couchPut = util.promisify(couchdb.put);
+const couchSave = util.promisify(couchdb.save);
+const couchDelete = util.promisify(couchdb.del);
 //const nano = require('nano')('http://localhost:5984');
 //const cradle = require('cradle');
 //console.log("cradle " + Object.getOwnPropertyNames(cradle));
@@ -80,18 +83,19 @@ app.post('/autenticar_no_banco', JSONParser, async (req, res)=>{
    let resposta = (await couchGet("/" + req.body.login)).body;
 
    if(resposta.senha == req.body.senha){
-      res.render("navCima", {nome: resposta.nome, chave: resposta.key, cliente: true});
+      res.render("navCima", {nome: resposta.nome, chave: resposta.login, cliente: true});
    }else{
       couchdb.database("adms");
       resposta = (await couchGet("/" + req.body.login)).body;
       if(resposta.senha == req.body.senha){
-         res.render("navCima", {nome: resposta.nome, chave: resposta.key, cliente: false});
+         res.render("navCima", {nome: resposta.nome, chave: resposta.login, cliente: false});
+
       }else res.send("");
    }
 });
 
 // roteia o cadastroCliente.html
-app.post('/cadastroCliente.html', JSONParser, async (req, res)=>{console.log("entrou em cadastroCliente");
+app.post('/cadastroCliente.html', JSONParser, async (req, res)=>{
    couchdb.database('clientes');
    const cliente = (await couchGet(req.body.chave)).body;
 
@@ -239,7 +243,8 @@ app.get('/listaCliente.html', async (req, res)=>{
          let cliente = (await couchGet(clientes[i].key)).body;
          if(cliente._id){
             lista[i] = {
-               nome: cliente.nome
+               nome: cliente.nome,
+               chave: cliente._id
             };
          }
       } catch (exception){
@@ -247,6 +252,49 @@ app.get('/listaCliente.html', async (req, res)=>{
       }
    }
    res.render('listaCliente', {listaClientes: lista});
+});
+
+// roteia a cadastrarCliente.html
+app.get('/cadastrarCliente.html', (req, res)=>{
+   res.sendFile(__dirname + "/cadastrarCliente.html");
+});
+
+// roteia o cadastrarCliente para cadastrar o cliente no banco
+app.put(/\/clientes\/.*/, JSONParser, async (req, res)=>{
+   couchdb.database('clientes');
+   const resposta = (await couchPut(req.body.login, req.body)).body;
+console.log("aqio??");
+   res.send(resposta);
+});
+
+// roteia o cadastrarCliente para editar o cadastro do cliente no banco
+app.post(/\/clientes\/.*/, JSONParser, async (req, res)=>{
+   couchdb.database('clientes');
+   const resposta = (await couchSave(req.body.login, req.body)).body;
+console.log("editar cliente " + resposta.error);
+   res.send(resposta);
+});
+
+// roteia o cadastrarCliente para remover o cliente do banco
+app.delete(/\/clientes\/.*/, async (req, res)=>{
+   couchdb.database('clientes');
+   var id = req.url.split("/");
+   const resposta = (await couchDelete(id[id.length-1])).body;
+
+   res.send(resposta);
+});
+
+// roteia o cadastroClienteAdm.html
+app.post('/cadastroClienteAdm.html', JSONParser, async (req, res)=>{
+   couchdb.database('clientes');
+   const cliente = (await couchGet(req.body.chave2)).body;
+
+   if(cliente){
+      res.render("cadastroClienteAdm", {c: cliente});
+   }
+   else{
+      res.send("Erro, usuário não encontrado.");
+   }
 });
 
 // cria o servidor
