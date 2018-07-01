@@ -1,0 +1,32 @@
+body
+	| Foto:
+	img(id="imagemCadastro" src="Imagens/#{c.key}/cliente.jpg" alt="cliente" width="110px" height="128px")
+	br
+	br
+	br
+	form(style="clear: both")
+		| Alterar Foto:
+		input(id="inputImagemCadastro" type="file" onchange="alterouImagemCadastro(this)")
+		br
+		br
+		| Nome:
+		input(id="nomeCliente" type="text" name="cadastroCliente" value= c.nome)
+		br
+		br
+		| Endereço:
+		input(id="enderecoCliente" type="text" name="enderecoCliente" value= c.endereco)
+		br
+		br
+		| Telefone:
+		input(id="telefoneCliente" type="tel" name="telefoneCliente" value= c.telefone)
+		br
+		br
+		| E-mail:
+		input(id="emailCliente" type="email" name="emailCliente" value= c.email)
+		br
+		br
+		br
+		input(onClick="alterarPagina('listaCliente')" type="button" value="Voltar")
+		input(id="remover" onClick="removerCadastro('clientes', '" + c._id + "')" type="button" value="Remover Cadastro")
+		input(id="salvar" onClick="alterarCadastroCliente('clientes', '" + c._id + "', true)" type="button" value="Salvar")
+		br
