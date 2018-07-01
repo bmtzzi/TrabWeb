@@ -91,7 +91,7 @@ app.post('/autenticar_no_banco', JSONParser, async (req, res)=>{
 });
 
 // roteia o cadastroCliente.html
-app.get('/cadastroCliente.html', async (req, res)=>{console.log(req.body);
+app.post('/cadastroCliente.html', JSONParser, async (req, res)=>{console.log("entrou em cadastroCliente");
    couchdb.database('clientes');
    const cliente = (await couchGet(req.body.chave)).body;
 

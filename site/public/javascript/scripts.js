@@ -33,7 +33,7 @@ const atualizarElementoAutenticado = (destino, pagina) => {
 						console.log("carregou " + pagina);setTimeout(() => {
 						resolve();}, 1000);
 					} else{
-						alert("Erro: " + xhttp.statusText + "(" + xhttp.status + ")");
+						alert("Erro1: " + xhttp.statusText + "(" + xhttp.status + ")");
 					}
 			    	}
 			};
@@ -249,7 +249,7 @@ const alterarPagina = (...pagina) => {
 		case "finalizarCompra":
 			atualizarElemento(document.getElementsByTagName("main")[0], "finalizarCompra.html");
 			break;
-		case "cadastroCliente":
+		case "cadastroCliente":console.log("entrou no cadastro cliente");
 			selecionado = document.getElementById("mainCliente");
 			atualizarElementoAutenticado(selecionado, "cadastroCliente.html").then( result => {
 				selecionado.className = "secCadastraCliente";
