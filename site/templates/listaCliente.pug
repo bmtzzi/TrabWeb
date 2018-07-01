@@ -5,5 +5,5 @@ body
 	br
 	ul(id="listaClientes")
 		for i in listaClientes
-			li(onClick="alterarPagina('cadastroClienteAdm', " + i.chave + ")") #{i.nome}
+			li(onClick="alterarPagina('cadastroClienteAdm', '" + i.chave + "')") #{i.nome}
 	br
