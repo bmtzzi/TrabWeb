@@ -107,6 +107,19 @@ app.post('/cadastroCliente.html', JSONParser, async (req, res)=>{
    }
 });
 
+// roteia o cadastroAdm.html
+app.post('/cadastroAdm.html', JSONParser, async (req, res)=>{
+   couchdb.database('adms');
+   const adm = (await couchGet(req.body.chave2)).body;
+
+   if(adm){
+      res.render("cadastroAdm", {a: adm});
+   }
+   else{
+      res.send("Erro, usuário não encontrado.");
+   }
+});
+
 // roteia o produtos/ID_PRODUTO/foto
 app.get(/produtos\/\d*\/foto/, async (req, res)=>{
 //   console.log(Object.getOwnPropertyNames(req));
@@ -254,30 +267,88 @@ app.get('/listaCliente.html', async (req, res)=>{
    res.render('listaCliente', {listaClientes: lista});
 });
 
+// roteia a lista de administradores para o administrador
+app.get('/listaAdm.html', async (req, res)=>{
+
+   let response = "";
+   couchdb.database('adms');
+   let adms = (await couchGet('_all_docs')).body.rows;
+   const lista = [];
+
+   for(let i in adms){
+      try{
+         let adm = (await couchGet(adms[i].key)).body;
+         if(adm._id){
+            lista[i] = {
+               nome: adm.nome,
+               chave: adm._id
+            };
+         }
+      } catch (exception){
+         console.log(exception);
+      }
+   }
+   res.render('listaAdm', {listaAdms: lista});
+});
+
 // roteia a cadastrarCliente.html
-app.get('/cadastrarCliente.html', (req, res)=>{
+app.post('/cadastrarCliente.html', (req, res)=>{
    res.sendFile(__dirname + "/cadastrarCliente.html");
+});
+
+// roteia a cadastrarAdm.html
+app.post('/cadastrarAdm.html', (req, res)=>{
+   res.sendFile(__dirname + "/cadastrarAdm.html");
 });
 
 // roteia o cadastrarCliente para cadastrar o cliente no banco
 app.put(/\/clientes\/.*/, JSONParser, async (req, res)=>{
    couchdb.database('clientes');
    const resposta = (await couchPut(req.body.login, req.body)).body;
-console.log("aqio??");
+
    res.send(resposta);
 });
 
-// roteia o cadastrarCliente para editar o cadastro do cliente no banco
+// roteia o cadastrarAdm para cadastrar o administrador no banco
+app.put(/\/adms\/.*/, JSONParser, async (req, res)=>{
+   couchdb.database('adms');
+   const resposta = (await couchPut(req.body.login, req.body)).body;
+
+   res.send(resposta);
+});
+
+// roteia o cadastroClienteAdm para editar o cadastro do cliente no banco
 app.post(/\/clientes\/.*/, JSONParser, async (req, res)=>{
    couchdb.database('clientes');
+   const cliente = (await couchGet(req.body.login)).body;
+   req.body.senha = cliente.senha;
    const resposta = (await couchSave(req.body.login, req.body)).body;
-console.log("editar cliente " + resposta.error);
+
    res.send(resposta);
 });
 
-// roteia o cadastrarCliente para remover o cliente do banco
+// roteia o cadastroAdm para editar o cadastro do administrador no banco
+app.post(/\/adms\/.*/, JSONParser, async (req, res)=>{console.log("salvar adm");
+   couchdb.database('adms');
+   const adm = (await couchGet(req.body.login)).body;
+   req.body.senha = adm.senha;
+   const resposta = (await couchSave(req.body.login, req.body)).body;
+
+   res.send(resposta);
+});
+
+// roteia o cadastroClienteAdm para remover o cliente do banco
 app.delete(/\/clientes\/.*/, async (req, res)=>{
    couchdb.database('clientes');
+   var id = req.url.split("/");
+   const resposta = (await couchDelete(id[id.length-1])).body;
+
+   res.send(resposta);
+});
+
+// roteia o cadastroAdm para remover o administrador do banco
+app.delete(/\/adms\/.*/, async (req, res)=>{
+   couchdb.database('adms');
    var id = req.url.split("/");
    const resposta = (await couchDelete(id[id.length-1])).body;
 

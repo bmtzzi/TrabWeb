@@ -7,8 +7,8 @@
 					if(xhttp.status == 200){
 						// Typical action to be performed when the document is ready:
 						destino.innerHTML = xhttp.responseText;
-						console.log("carregou " + pagina);setTimeout(() => {
-						resolve();}, 1000);
+						console.log("carregou " + pagina);
+						resolve();
 					} else{
 						alert("Erro: " + xhttp.statusText + "(" + xhttp.status + ")");
 					}
@@ -30,8 +30,8 @@ const atualizarElementoAutenticado = (destino, pagina, idSec) => {
 					if(xhttp.status == 200){
 						// Typical action to be performed when the document is ready:
 						destino.innerHTML = xhttp.responseText;
-						console.log("carregou " + pagina);setTimeout(() => {
-						resolve();}, 1000);
+						console.log("carregou " + pagina);
+						resolve();
 					} else{
 						alert("Erro1: " + xhttp.statusText + "(" + xhttp.status + ")");
 					}
@@ -355,26 +355,26 @@ const alterarPagina = (...pagina) => {
 
 		case "cadastroAdm":
 			selecionado = document.getElementById("mainAdm");
-			atualizarElemento(selecionado, "cadastroAdm.html").then( result => {
-				if(pagina[1]){
+			atualizarElementoAutenticado(selecionado, "cadastroAdm.html", pagina[1]).then( result => {
+				/*if(pagina[1]){
 					gerarConteudo(pagina[1], pagina[0]);
 				}
 				else{
-					gerarConteudo(document.getElementById("welcome").cod, pagina[0]);
-					selecionado = document.getElementById("cadastroAdm");
-					if(selecionado){
-						selecionado.className = "active";
-					}
+					gerarConteudo(document.getElementById("welcome").cod, pagina[0]);*/
+				selecionado.className = "secCadastraCliente";
+				selecionado = document.getElementById("cadastroAdm");
+				
+				if(selecionado){
+					selecionado.className = "active";
 				}
+				//}
 			});
-			selecionado.className = "secCadastraCliente";
+			
 			break;
 
 		case "listaAdm":
 			selecionado = document.getElementById("mainAdm");
-			atualizarElemento(selecionado, "listaAdm.html").then( result => {
-				gerarConteudo(null, pagina[0]);
-			});
+			atualizarElemento(selecionado, "listaAdm.html");
 			selecionado.className = "secCadastraCliente";
 			selecionado = document.getElementById("listaAdm");
 			if(selecionado){
@@ -434,12 +434,12 @@ const alterarPagina = (...pagina) => {
 			break;
 		case "cadastrarAdm":
 			selecionado = document.getElementById("mainAdm");
-			atualizarElemento(selecionado, "cadastrarAdm.html");
+			atualizarElementoAutenticado(selecionado, "cadastrarAdm.html");
 			selecionado.className = "secCadastraCliente";
 			break;
 		case "cadastrarCliente":
 			selecionado = document.getElementById("mainAdm");
-			atualizarElemento(selecionado, "cadastrarCliente.html");
+			atualizarElementoAutenticado(selecionado, "cadastrarCliente.html");
 			selecionado.className = "secCadastraCliente";
 			break;
 		case "cadastrarProduto":
@@ -461,7 +461,7 @@ const mostrarMateria = (materia) => {
 	atualizarElemento(document.getElementsByTagName("main")[0], materia + ".html");
 };
 
-// TODO tem que decidir se vai ser feito assim mesmo
+
 const mostrarProduto = (produto) => atualizarElemento(document.getElementsByTagName("main")[0], produto + ".html");
 
 const autenticar = async () => {
@@ -520,37 +520,49 @@ const cadastrarCliente = async () => {
 
 const cadastrarAdm = async () => {
 	let srcFoto = await getCaminhoDoArquivo(document.getElementById("inputImagemCadastro"));
-	let tabelaAdm = db.transaction("adm", "readwrite").objectStore("adm");
+	
+	let cliente = await addBanco("adms", document.getElementById("loginAdm").value, JSON.stringify({
+		nome: document.getElementById("nomeAdm").value,
+		telefone: document.getElementById("telefoneAdm").value,
+		email: document.getElementById("emailAdm").value,
+		login: document.getElementById("loginAdm").value,
+		senha: document.getElementById("senhaAdm").value,
+		
+	}));
 
-	tabelaAdm.add({
-			nome: document.getElementById("nomeAdm").value,
-			telefone: document.getElementById("telefoneAdm").value,
-			email: document.getElementById("emailAdm").value,
-			login: document.getElementById("loginAdm").value,
-			senha: document.getElementById("senhaAdm").value,
-			foto: srcFoto
-		}).onsuccess = () => {
-			alert("Administrador cadastrado com sucesso.");
-			console.log("Cliente cadastrado!");
-			alterarPagina("listaAdm");
-		};
+	if(JSON.parse(cliente).ok){
+		//TODO fazer attachment da foto	usando response do addbanco	
+		//foto: srcFoto
+		alterarPagina("listaAdm");
+		alert("Administrador cadastrado com sucesso!");
+	}else{
+		alert("Usuário já existe");
+	}	
 };
 
-const removerCadastroAdm = (cod) => {
+/*const removerCadastroAdm = (cod) => {
 	db.transaction("adm", "readwrite").objectStore("adm").delete(cod).onsuccess = () => {
 		alert("Administrador removido com sucesso");
 		alterarPagina("listaAdm");
 	};
-};
+};*/
 
 const removerCadastro = async (banco, cod) => {
-console.log("cod: " + cod);
 	var response = await removeBanco(banco, cod);
-	if(JSON.parse(response).ok){	
-		alterarPagina("listaCliente");		
-		alert("Cliente removido com sucesso");		
+	if(banco == "clientes"){
+		if(JSON.parse(response).ok){	
+			alterarPagina("listaCliente");		
+			alert("Cliente removido com sucesso");
+		}	
 	}else{
-		alert("Algo deu errado");
+		if(banco == "adms"){
+			if(JSON.parse(response).ok){	
+			alterarPagina("listaAdm");		
+			alert("Administrador removido com sucesso");
+			}
+		}else{
+			alert("Algo deu errado");
+		}
 	}
 };
 
@@ -608,45 +620,7 @@ const cadastrarPet = async (cod) => {
 		}
 };
 
-const alterarCadastroCliente = async (banco, cod, isAdm) => {console.log("vai alterar dados do cliente");
-	//let foto = await getCaminhoDoArquivo(document.getElementById("inputImagemCadastro"));
-	//let objectStore = db.transaction("cliente", "readwrite").objectStore("cliente");
-	//let request = objectStore.get(cod);
-	/*request.onsuccess = (e) => {
-		let tupla = request.result;
-		if(foto != null){
-			tupla.foto = foto;
-		}
-		let nome = document.getElementById("nomeCliente").value;
-		if(nome != ""){
-			tupla.nome = nome;
-		}
-		let endereco = document.getElementById("enderecoCliente").value;
-		if(endereco != ""){
-			tupla.endereco = endereco;
-		}
-		let telefone = document.getElementById("telefoneCliente").value;
-		if(telefone != ""){
-			tupla.telefone = telefone;
-		}
-		let email = document.getElementById("emailCliente").value;
-		if(email != ""){
-			tupla.email = email;
-		}
-		let requestUpdate = objectStore.put(tupla);
-		requestUpdate.onsuccess = (e) => {
-			alert("Cadastro alterado com sucesso.");
-			if(isAdm){
-				alterarPagina("listaCliente");
-			}
-			else{
-				alterarPagina("loginClienteSucesso");
-			}
-		};
-		requestUpdate.onerror = (e) => {
-			alert("Dados não puderam ser atualizados, tente novamente mais tarde.");
-		};
-	};*/
+const alterarCadastroCliente = async (banco, cod, isAdm) => {	
 	let srcFoto = await getCaminhoDoArquivo(document.getElementById("inputImagemCadastro"));
 	
 	let cliente = await alterarBanco(banco, cod, JSON.stringify({
@@ -655,51 +629,36 @@ const alterarCadastroCliente = async (banco, cod, isAdm) => {console.log("vai al
 		telefone: document.getElementById("telefoneCliente").value,
 		email: document.getElementById("emailCliente").value,
 		login: cod
-		//senha: document.getElementById("senhaCliente").value,
 	}));
 
 	if(JSON.parse(cliente).ok){
 		//TODO fazer attachment da foto	usando response do addbanco	
 		//foto: srcFoto
 		alterarPagina("listaCliente");
-		alert("Cliente cadastrado com sucesso!");
+		alert("Dados alterados com sucesso!");
 	}else{
-		alert("Usuário já existe");
+		alert("Algo deu errado");
 	}	
 };
 
-const alterarCadastroAdm = async (cod) => {console.log("vai alterar dados do admin");
-	let foto = await getCaminhoDoArquivo(document.getElementById("inputImagemCadastro"));
-	let objectStore = db.transaction("adm", "readwrite").objectStore("adm");
-	let request = objectStore.get(cod);
-	request.onsuccess = (e) => {
-		tupla = request.result;
-		if(tupla){
-			if(foto != null){
-				tupla.foto = foto;
-			}
-			let nome = document.getElementById("nomeAdm").value;
-			if(nome != ""){
-				tupla.nome = nome;
-			}
-			let telefone = document.getElementById("telefoneAdm").value;
-			if(telefone != ""){
-				tupla.telefone = telefone;
-			}
-			let email = document.getElementById("emailAdm").value;
-			if(email != ""){
-				tupla.email = email;
-			}console.log(tupla);
-			let requestUpdate = objectStore.put(tupla);
-			requestUpdate.onsuccess = (e) => {
-				alert("Cadastro alterado com sucesso.");
-				alterarPagina("listaAdm", true);
-			};
-			requestUpdate.onerror = (e) => {
-				alert("Dados não puderam ser atualizados, tente novamente mais tarde.");
-			};
-		};
-	};
+const alterarCadastroAdm = async (banco, cod) => {console.log("vai alterar dados do admin");
+	let srcFoto = await getCaminhoDoArquivo(document.getElementById("inputImagemCadastro"));
+	
+	let cliente = await alterarBanco(banco, cod, JSON.stringify({
+		nome: document.getElementById("nomeAdm").value,
+		telefone: document.getElementById("telefoneAdm").value,
+		email: document.getElementById("emailAdm").value,
+		login: cod
+	}));
+
+	if(JSON.parse(cliente).ok){
+		//TODO fazer attachment da foto	usando response do addbanco	
+		//foto: srcFoto
+		alterarPagina("listaAdm");
+		alert("Dados alterados com sucesso!");
+	}else{
+		alert("Algo deu errado");
+	}
 };
 
 const getBancosCarrinho = (tipo, cod) => {
