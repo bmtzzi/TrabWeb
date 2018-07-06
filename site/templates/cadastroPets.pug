@@ -1,0 +1,27 @@
+body
+	| Foto:
+	img(id="imagemCadastro" src=pet._id + "/foto" alt="foto do pet " + pet.nome width="90px" height="90px")
+	br
+	br
+	br
+	form
+		| Alterar Foto:
+		input(id="inputImagemCadastro" type="file" onchange="alterouImagemCadastro(this)")
+		br
+		br
+		| Nome:
+		input(type="text" name="nome" id="nome" value=pet.nome)
+		br
+		br
+		| Raça:
+		input(type="text" name="raca" id="raca" value=pet.raca)
+		br
+		br
+		| Idade:
+		input(type="text" name="idade" id="idade" value=pet.idade)
+		br
+		br
+		button(type="button" onClick="alterarPagina('meusPets')") Voltar
+		button(type="button" onClick="removerCadastro('pets', String(this.getAttribute('cod')))" cod=pet._id) Remover Cadastro
+		button(type="button" id="salvar" onClick="alterarCadastroPet(String(this.getAttribute('cod')))" cod=pet._id) Salvar
+	br
