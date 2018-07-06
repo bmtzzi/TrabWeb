@@ -316,9 +316,7 @@ const alterarPagina = (...pagina) => {
 			break;
 		case "meusPets":
 			selecionado = document.getElementById("mainCliente");
-			atualizarElementoAutenticado(selecionado, "meusPets.html").then( result => {
-				gerarConteudo(document.getElementById("welcome").cod, pagina[0]);
-			});
+			atualizarElementoAutenticado(selecionado, "meusPets.html");
 			selecionado.className = "secCadastraCliente";
 			selecionado = document.getElementById("meusPets");
 			if(selecionado){
@@ -327,23 +325,25 @@ const alterarPagina = (...pagina) => {
 			break;
 		case "agendamento":
 			selecionado = document.getElementById("mainCliente");
-			atualizarElemento(selecionado, "agendamento.html").then( result => {
-				gerarConteudo(null, pagina[0]);
-			});
+			atualizarElementoAutenticado(selecionado, "agendamento.html", pagina[1]);
 			selecionado.className = "secCadastraCliente";
-			selecionado = document.getElementById("agendar");
+			break;
+
+		case "meuAgendamento":
+			selecionado = document.getElementById("mainCliente");
+			atualizarElementoAutenticado(selecionado, "meuAgendamento.html");
+			selecionado.className = "secCadastraCliente";
+			selecionado = document.getElementById("meusAgendamentos");
 			if(selecionado){
 				selecionado.className = "active";
 			}
 			break;
 
-		case "meuAgendamento":
+		case "agendar":
 			selecionado = document.getElementById("mainCliente");
-			atualizarElemento(selecionado, "meuAgendamento.html").then( result => {
-				gerarConteudo(document.getElementById("welcome").cod, pagina[0]);
-			});
+			atualizarElementoAutenticado(selecionado, "agendar.html", pagina[1]);
 			selecionado.className = "secCadastraCliente";
-			selecionado = document.getElementById("meusAgendamentos");
+			selecionado = document.getElementById("agendar");
 			if(selecionado){
 				selecionado.className = "active";
 			}
@@ -573,6 +573,12 @@ const removerCadastro = async (banco, cod) => {
 			if(JSON.parse(response).ok){
 				alterarPagina("meusPets");
 				alert("Pet removido com sucesso");
+			}
+			break;
+		case "agenda":
+			if(JSON.parse(response).ok){
+				alterarPagina("meuAgendamento");
+				alert("Agendamento removido com sucesso");
 			}
 			break;
 		default:

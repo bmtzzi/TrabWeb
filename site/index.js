@@ -133,17 +133,18 @@ app.post('/cadastroPets.html', JSONParser, async (req, res)=>{
 });
 
 // roteia o produtos/ID_PRODUTO/foto
-app.get(/produtos\/\d*\/foto/, async (req, res)=>{
+app.get(/produtos\/.*\/foto/, async (req, res)=>{
 //   console.log(Object.getOwnPropertyNames(req));
 //   console.log(req.url);
-   console.log(req.query.doc + " " + req.query.image);
    couchdb.database('produtos');
 //   res.send(await couchGet(req.url));
 //   switch(req.url)
 //console.log(req.url + " vai buscar produto " + req.url.slice(10,));
-   console.log();
-   console.log(Object.getOwnPropertyNames((await couchGet(req.url.slice(10,))).toJSON));
-   (await couchGet(req.url.slice(10,))).pipe(res)
+   console.log(req.url.slice(10,));
+//   console.log(Object.getOwnPropertyNames((await couchGet(req.url.slice(10,))).toJSON));
+   res.setHeader("Content-Type", "image/png");
+   let foto = (await couchGet(req.url.slice(10,))).body;
+   res.end(JSON.stringify(foto), "binary");
 });
 
 // roteia o loja ou loja_home
@@ -360,21 +361,24 @@ app.post('/meusPets.html', JSONParser, async (req, res)=>{
    couchdb.database('pets');
    let pets = (await couchGet('_all_docs')).body.rows;
    const lista = [];
+   let cont = 0;
 
    for(let i in pets){
       try{
          let pet = (await couchGet(pets[i].key)).body;
             console.log(pet.cliente + " " + req.body.chave);
          if(pet._id && pet.cliente == req.body.chave){console.log("colocando pet " + pet._id + " " + pet.nome + " do cliente " + pet.cliente);
-            lista[i] = {
+            lista[cont] = {
             nome:  pet.nome,
             chave: pet._id
             };
+            cont += 1;
          }
       } catch (exception){
          console.log(exception);
       }
    }console.log(lista);
+   lista.tam = cont;
    res.render('meusPets', {listaPets: lista});
 });
 
@@ -449,6 +453,93 @@ app.post('/cadastrarAdm.html', (req, res)=>{
 // roteia a cadastrarPet.html
 app.get('/cadastrarPet.html', (req, res)=>{
    res.sendFile(__dirname + "/cadastrarPet.html");
+});
+
+// roteia a cadastrarPet.html
+app.get('/agendar.html', async (req, res)=>{
+   couchdb.database('agenda');
+   let listaAgendamentos = (await couchGet('_all_docs')).body.rows;
+   const lista = [];
+   for(i in listaAgendamentos){
+      let compromisso = (await couchGet(listaAgendamentos[i].key)).body;console.log("cliente " + compromisso.cliente + " " + req.body.chave);
+      couchdb.database('pets');
+      let pet = (await couchGet(compromisso.pet)).body.nome;
+      couchdb.database('servicos');
+      let servico = (await couchGet(compromisso.servico)).body;
+      couchdb.database('agenda');
+      if(servico.marca){
+         var nomeServico = servico.nome + " " + servico.marca;
+      } else {
+         nomeServico = servico.nome;
+      }
+      lista[i] = {
+         cod: compromisso._id,
+         data: compromisso.data,
+         hora: compromisso.hora,
+         servico: nomeServico,
+         pet: pet
+      };
+   }
+   res.render("agendar", {listaAgendamentos: lista.sort((a, b) => {return a.parseInt() - b.parseInt()})});
+});
+
+// roteia a meuAgendamento.html
+app.post('/meuAgendamento.html', JSONParser, async (req, res)=>{
+   couchdb.database('agenda');
+   let listaAgendamentos = (await couchGet('_all_docs')).body.rows;
+   const lista = [];
+   let cont = 0;
+   for(i in listaAgendamentos){
+      let compromisso = (await couchGet(listaAgendamentos[i].key)).body;console.log("cliente " + compromisso.cliente + " " + req.body.chave);
+      if(compromisso.cliente == req.body.chave){console.log(Object.getOwnPropertyNames(compromisso));
+         couchdb.database('pets');
+         let pet = (await couchGet(compromisso.pet)).body.nome;
+         couchdb.database('servicos');
+         let servico = (await couchGet(compromisso.servico)).body;
+         couchdb.database('agenda');
+         if(servico.marca){
+            var nomeServico = servico.nome + " " + servico.marca;
+         } else {
+            nomeServico = servico.nome;
+         }
+         lista[cont] = {
+            cod: compromisso._id,
+            data: compromisso.data,
+            hora: compromisso.hora,
+            servico: nomeServico,
+            pet: pet
+         };
+         cont += 1;
+      }
+   }
+   lista.tam = cont;
+   res.render("meuAgendamento", {listaAgendamentos: lista});
+});
+
+// roteia a agendamento.html
+app.post('/agendamento.html', JSONParser, async (req, res)=>{
+   couchdb.database('agenda');
+   let lista = undefined;
+   let compromisso = (await couchGet(req.body.chave2)).body;
+   if(compromisso.cliente == req.body.chave){
+      couchdb.database('pets');
+      let pet = (await couchGet(compromisso.pet)).body.nome;
+      couchdb.database('servicos');
+      let servico = (await couchGet(compromisso.servico)).body;
+      if(servico.marca){
+         var nomeServico = servico.nome + " " + servico.marca;
+      } else {
+         nomeServico = servico.nome;
+      }
+      lista = {
+         cod: compromisso._id,
+         data: compromisso.data,
+         hora: compromisso.hora,
+         servico: nomeServico,
+         pet: pet
+      };
+   }
+   res.render("agendamento", lista);
 });
 
 // roteia o cadastrarCliente para cadastrar o cliente no banco
@@ -534,9 +625,18 @@ app.delete(/\/adms\/.*/, async (req, res)=>{
    res.send(resposta);
 });
 
-// roteia o cadastroAdm para remover o administrador do banco
+// roteia o meusPets para remover o pet do banco
 app.delete(/\/pets\/.*/, async (req, res)=>{
    couchdb.database('pets');
+   var id = req.url.split("/");
+   const resposta = (await couchDelete(id[id.length-1])).body;
+
+   res.send(resposta);
+});
+
+// roteia o compromisso para remover o compromisso do banco
+app.delete(/\/agenda\/.*/, async (req, res)=>{
+   couchdb.database('agenda');
    var id = req.url.split("/");
    const resposta = (await couchDelete(id[id.length-1])).body;
 
