@@ -8,7 +8,7 @@
 #################################################################
 
 # vai pro diretório onde estão as imagens necessárias para inclusão no banco de dados
-cd ../site/Imagens
+cd ../site/public/Imagens
 
 # Cria a tabela produtos
 curl -X PUT http://localhost:5984/produtos
