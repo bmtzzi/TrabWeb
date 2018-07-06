@@ -1,0 +1,8 @@
+﻿body
+	if(listaAgendamentos.tam > 0)
+		ul(id="listaMeusAgendamentos")
+			for i in listaAgendamentos
+				li(onClick="alterarPagina('agendamento', '" + i.cod + "')") #{i.data} , #{i.hora} - #{i.servico}, #{i.pet}
+		br
+	else
+		h3 Você não possui Agendamentos ainda.

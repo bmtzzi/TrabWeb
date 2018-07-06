@@ -1,0 +1,14 @@
+body
+	section(class="secCadastraCliente")
+		p
+			| Dia: #{data}
+			br
+			| Horário: #{hora}
+			br
+			| Serviço: #{servico}
+			br
+			| Pet: #{pet}
+			br
+		button(onClick="alterarPagina('agendar', '" + cod + "')") Remarcar
+		button(onClick="removerCadastro('agenda', '" + cod + "')") Cancelar Agendamento
+	br
