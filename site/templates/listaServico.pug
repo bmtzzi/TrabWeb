@@ -1,0 +1,9 @@
+body
+	button(onClick="alterarPagina('cadastrarServico')") + Cadastrar novo serviço
+	br
+	br
+	br
+	ul(id="listaServico")
+		for i in listaServicos
+			li(onClick="alterarPagina('cadastroServico', '" + i.chave + "')") #{i.nome}
+	br
