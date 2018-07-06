@@ -1,0 +1,99 @@
+body
+	-	var totalProdutos = 0
+		var totalServicos = 0
+		var totalPets = 0
+	section(class="secGanhos")
+		if(produtos[0])
+			ul(class="produtos")
+				li(style="margin-left: 55px;")
+					h3(class="legendaCarrinho") Produto
+					h3(style="display: inline;margin-left: 31.3\%;") Quantidade
+					h3(style="float: right;") Valor
+
+				li(class="primeiroItemCarrinho")
+					p(class="pGanhos")
+						img(class="imgGanhos" src=produtos[0].banco + "/" + produtos[0]._id + "/foto" alt= produtos[0].alt width="30px" height="auto")
+						h4(class="nomeProdutoCarrinho") #{produtos[0].nome}
+						h4(class="inputQtdCarrinho") #{produtos[0].quantidadeVendida}
+						h4(class="precoProdutoCarrinho") R\$ produtos[0].preco
+				-
+					totalProdutos += produtos[0].preco * produtos[0].quantidadeVendida
+				for i in - produtos.slice(1,)
+					li(class="outroItemCarrinho")
+						p(class="pGanhos")
+							(img(class="imgGanhos" src=produtos[i]._id + "/foto" alt=produtos[i].alt width="30px" height="auto")
+							h4(class="nomeProdutoCarrinho"> produtos[i].nome + " " + produtos[i].marca
+							h4(class="inputQtdCarrinho") produtos[i].quantidadeVendida
+							h4(class="precoProdutoCarrinho") R\$ produtos[i].preco
+					-	totalProdutos += produtos[i].preco * produtos[i].quantidadeVendida
+	p(class="subtotal") Subtotal: R\$ #{totalProdutos}
+	br
+	br
+    
+	section(class="secGanhos")
+		ul(class="listaCarrinho")
+			li(style="margin-left: 55px;")
+				h3(class="legendaCarrinho") Serviço
+				h3(style="display: inline;margin-left: 31.3\%;") Quantidade
+				h3(style="float: right;") Valor
+			if(servicos[0])
+				li(class="primeiroItemCarrinho")
+					p(class="pGanhos")
+						if(servicos[0].marca)
+							- nomeServico = servicos[0].nome + " " + servicos[0].marca
+						else
+							- nomeServico = servicos[0].nome
+						img(class="imgGanhos" src=servicos[0]._id + "/foto" alt=servicos[0].alt width="30px" height="auto")
+						h4(class="nomeProdutoCarrinho") #{nomeServico}
+						h4(class="inputQtdGanho") #{servicos[0].quantidadeVendida}
+						h4(class="precoProdutoCarrinho") R\$ #{servicos[0].preco}
+				-
+					totalServivos += servicos[0].preco * servicos[0].quantidadeVendida
+				for i in - servicos.slice(1,)
+					li(class="outroItemCarrinho")
+						p(class="pGanhos")
+							if(servicos[i].marca)
+								- nomeServico = servicos[i].nome + " " + servicos[i].marca
+							else
+								- nomeServico = servicos[i].nome
+							img(class="imgGanhos" src=servicos[i]._id + "/foto" alt=servicos[i].alt width="30px" height="auto")
+							h4(class="nomeProdutoCarrinho") #{nomeServico}
+							h4(class="inputQtdGanho") #{servicos[i].quantidadeVendida}
+							h4(class="precoProdutoCarrinho") R\$ #{servicos[i].preco}
+					-	totalServivos += servicos[i].preco * servicos[i].quantidadeVendida
+	p(class="subtotal") Subtotal: R\$ #{totalServicos}
+	br
+	br
+	br
+
+	section(class="secGanhos")
+		ul(class="listaCarrinho")
+			li(style="margin-left: 55px;")
+				h3(class="legendaCarrinho") Pet
+				h3(style="display: inline;margin-left: 31.3\%;") Quantidade
+				h3(style="float: right;") Valor
+			if(pets[0])
+				li(class="primeiroItemCarrinho")
+					p(class="pGanhos")
+						img(class="imgGanhos" src=pets[0]._id alt=pets[0].alt width="30px" height="auto")
+						h4(class="nomeProdutoCarrinho") #{pets[0].nome}
+						h4(class="inputQtdGanho") #{pets[0].quantidadeVendida}
+						h4(class="precoProdutoCarrinho") R\$ {#pets[0].preco}
+				-
+					totalPets += pets[0].preco * pets[0].quantidadeVendida
+				for i in - pets.slice(1,)
+					li(class="outroItemCarrinho")
+						p(class="pGanhos")
+							img(class="imgGanhos" src=pets[i]._id alt=pets[0].alt width="30px" height="auto")
+							h4(class="nomeProdutoCarrinho") #{pets[i].nome}
+							h4(class="inputQtdGanho") #{pets[i].quantidadeVendida}
+							h4(class="precoProdutoCarrinho") R\$ {#pets[i].preco}
+					-	totalPets += pets[i].preco * pets[i].quantidadeVendida
+	p(class="subtotal") Subtotal: R\$ #{petsTotal}
+	br
+	br
+	br
+	p(class="subtotal") Total: R\$ #{petsTotal} + #{servicosTotal} + #{produtosTotal}
+	br
+	br
+	br
