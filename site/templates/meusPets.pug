@@ -1,0 +1,9 @@
+body
+	if(listaPets [0])
+		ul(id="listaMeusPets")
+			for i in listaPets
+				if(i)
+					li(onClick="alterarPagina('cadastroPets', '" + i.chave + "')") #{i.nome}
+		br
+	else
+		h4 Você ainda não possui pets...
