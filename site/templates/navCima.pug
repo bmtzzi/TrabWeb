@@ -12,6 +12,8 @@ html
       a(id="navCimaBlog" onClick="alterarPagina('blog')") Blog
       a(id="navCimaSair" style="float:right" onClick="sair()") Sair
       if(cliente)
+         a(id="botaoCarrinho" onClick="alterarPagina('carrinho')")
+            img(src="Imagens/carrinho-de-compras.jpg" alt="carrinho" width="20px" height="20px")
          h5(cod=chave id="welcome" onClick="alterarPagina(this.getAttribute('pagina'))" pagina="loginClienteSucesso") Olá, #{nome} =D
       else
          h5(cod=chave id="welcome" onClick="alterarPagina(this.getAttribute('pagina'))" pagina="loginAdminSucesso") Olá, #{nome} =D
