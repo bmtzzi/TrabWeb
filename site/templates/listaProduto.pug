@@ -1,0 +1,9 @@
+body
+	button(onClick="alterarPagina('cadastrarProduto')") + Cadastrar novo produto
+	br
+	br
+	br
+	ul(id="listaProduto")
+		for i in listaProdutos
+			li(onClick="alterarPagina('cadastroProduto', '" + i.chave + "')") #{i.nome}
+	br
