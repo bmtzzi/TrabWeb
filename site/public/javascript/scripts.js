@@ -138,7 +138,7 @@ const alterarPagina = (...pagina) => {
 			}
 		}
 	}
-	let selecionado = undefined;
+	let selecionado = undefined;console.log(pagina[0] + " / " + String(pagina[0]));
 	switch(String(pagina[0])) {
 		case "produto":
 			atualizarElemento(document.getElementsByTagName("main")[0], "produto.html").then( result => {
@@ -311,16 +311,12 @@ const alterarPagina = (...pagina) => {
 
 		case "cadastroPets":
 			selecionado = document.getElementById("mainCliente");
-			atualizarElemento(selecionado, "cadastroPets.html");
+			atualizarElementoAutenticado(selecionado, "cadastroPets.html", pagina[1]);
 			selecionado.className = "secCadastraCliente";
-			selecionado = document.getElementById("cadastroPet");
-			if(selecionado){
-				selecionado.className = "active";
-			}
 			break;
 		case "meusPets":
 			selecionado = document.getElementById("mainCliente");
-			atualizarElemento(selecionado, "meusPets.html").then( result => {
+			atualizarElementoAutenticado(selecionado, "meusPets.html").then( result => {
 				gerarConteudo(document.getElementById("welcome").cod, pagina[0]);
 			});
 			selecionado.className = "secCadastraCliente";
@@ -355,7 +351,13 @@ const alterarPagina = (...pagina) => {
 
 		case "cadastroAdm":
 			selecionado = document.getElementById("mainAdm");
-			atualizarElementoAutenticado(selecionado, "cadastroAdm.html", pagina[1]).then( result => {
+			if(pagina[1]){
+				var codAdm = pagina[1];
+			}
+			else{
+				codAdm = document.getElementById('welcome').getAttribute('cod');
+			}
+			atualizarElementoAutenticado(selecionado, "cadastroAdm.html", codAdm).then( result => {
 				/*if(pagina[1]){
 					gerarConteudo(pagina[1], pagina[0]);
 				}
@@ -364,7 +366,7 @@ const alterarPagina = (...pagina) => {
 				selecionado.className = "secCadastraCliente";
 				selecionado = document.getElementById("cadastroAdm");
 				
-				if(selecionado){
+				if(selecionado && codAdm == document.getElementById('welcome').getAttribute('cod')){
 					selecionado.className = "active";
 				}
 				//}
@@ -392,10 +394,8 @@ const alterarPagina = (...pagina) => {
 			break;
 		case "listaProduto":
 			selecionado = document.getElementById("mainAdm");
-			atualizarElemento(selecionado, "listaProduto.html").then( result => {
-				gerarConteudo(pagina[1], pagina[0]);
-			});
-			selecionado.className = undefined;
+			atualizarElemento(selecionado, "listaProduto.html");
+			selecionado.className = "secCadastraCliente";
 			selecionado = document.getElementById("listaProduto");
 			if(selecionado){
 				selecionado.className = "active";
@@ -403,9 +403,7 @@ const alterarPagina = (...pagina) => {
 			break;
 		case "listaServico":
 			selecionado = document.getElementById("mainAdm");
-			atualizarElemento(selecionado, "listaServico.html").then( result => {
-				gerarConteudo(null, pagina[0]);
-			});
+			atualizarElemento(selecionado, "listaServico.html");
 			selecionado.className = "secCadastraCliente";
 			selecionado = document.getElementById("listaServico");
 			if(selecionado){
@@ -451,6 +449,15 @@ const alterarPagina = (...pagina) => {
 			selecionado = document.getElementById("mainAdm");
 			atualizarElemento(selecionado, "cadastrarServico.html");
 			selecionado.className = "secCadastraCliente";
+			break;
+		case "cadastrarPet":
+			selecionado = document.getElementById("mainCliente");
+			atualizarElemento(selecionado, "cadastrarPet.html");
+			selecionado.className = "secCadastraCliente";
+			selecionado = document.getElementById("cadastroPet");
+			if(selecionado){
+				selecionado.className = "active";
+			}
 			break;
 		default:
 			alert("Página não encontrada.");
@@ -514,7 +521,7 @@ const cadastrarCliente = async () => {
 		alterarPagina("listaCliente");
 		alert("Cliente cadastrado com sucesso!");
 	}else{
-		alert("Usuário já existe");
+		alert("Cliente já existe");
 	}	
 };
 
@@ -536,7 +543,7 @@ const cadastrarAdm = async () => {
 		alterarPagina("listaAdm");
 		alert("Administrador cadastrado com sucesso!");
 	}else{
-		alert("Usuário já existe");
+		alert("Administrador já existe");
 	}	
 };
 
@@ -549,20 +556,27 @@ const cadastrarAdm = async () => {
 
 const removerCadastro = async (banco, cod) => {
 	var response = await removeBanco(banco, cod);
-	if(banco == "clientes"){
-		if(JSON.parse(response).ok){	
-			alterarPagina("listaCliente");		
-			alert("Cliente removido com sucesso");
-		}	
-	}else{
-		if(banco == "adms"){
-			if(JSON.parse(response).ok){	
-			alterarPagina("listaAdm");		
-			alert("Administrador removido com sucesso");
+	switch(banco){
+		case "clientes":
+			if(JSON.parse(response).ok){
+				alterarPagina("listaCliente");
+				alert("Cliente removido com sucesso");
 			}
-		}else{
+		break;
+		case "adms":
+			if(JSON.parse(response).ok){
+				alterarPagina("listaAdm");
+				alert("Administrador removido com sucesso");
+			}
+			break;
+		case "pets":
+			if(JSON.parse(response).ok){
+				alterarPagina("meusPets");
+				alert("Pet removido com sucesso");
+			}
+			break;
+		default:
 			alert("Algo deu errado");
-		}
 	}
 };
 
@@ -604,20 +618,25 @@ const cadastraServico = async () => {
 		}
 };
 
-const cadastrarPet = async (cod) => {
+const cadastrarPet = async () => {
+	// TODO verificar se realmente precisa pegar o src assim ou só a partir do input pelo nome 'foto'
 	let srcFoto = await getCaminhoDoArquivo(document.getElementById("inputImagemCadastro"));
-	let tabelaServicos = db.transaction("pet", "readwrite").objectStore("pet");
-	tabelaServicos.add({
-			cliente: String(document.getElementById("welcome").cod),
-			foto: srcFoto,
-			idade: document.getElementById("idadePet").value,
-			nome: document.getElementById("nomePet").value,
-			raca: document.getElementById("racaPet").value
-		}).onsuccess = () => {
-			alert("Pet cadastrado com sucesso.");
-			console.log("Pet cadastrado!");
-			alterarPagina("listaPet");
-		}
+	console.log("codigo do cliente " + document.getElementById("welcome").getAttribute('cod'));
+	let pet = await addBanco("pets", document.getElementById("welcome").getAttribute('cod'), JSON.stringify({
+		nome: document.getElementById("nome").value,
+		raca: document.getElementById("raca").value,
+		idade: document.getElementById("idade").value,
+                cliente: document.getElementById("welcome").getAttribute('cod')
+	}));
+
+	if(JSON.parse(pet).ok){
+		//TODO fazer attachment da foto	usando response do addbanco	
+		//foto: srcFoto
+		alterarPagina("meusPets");
+		alert("Pet cadastrado com sucesso!");
+	}else{
+		alert("Pet já existe");
+	}	
 };
 
 const alterarCadastroCliente = async (banco, cod, isAdm) => {	
@@ -655,6 +674,27 @@ const alterarCadastroAdm = async (banco, cod) => {console.log("vai alterar dados
 		//TODO fazer attachment da foto	usando response do addbanco	
 		//foto: srcFoto
 		alterarPagina("listaAdm");
+		alert("Dados alterados com sucesso!");
+	}else{
+		alert("Algo deu errado");
+	}
+};
+
+const alterarCadastroPet = async (cod) => {
+	let srcFoto = await getCaminhoDoArquivo(document.getElementById("inputImagemCadastro"));
+	
+	let pet = await alterarBanco("pets", cod, JSON.stringify({
+		nome: document.getElementById("nome").value,
+		raca: document.getElementById("raca").value,
+		idade: document.getElementById("idade").value,
+		cliente: document.getElementById("welcome").getAttribute('cod'),
+		cod: document.getElementById("salvar").getAttribute("cod")
+	}));
+
+	if(JSON.parse(pet).ok){
+		//TODO fazer attachment da foto	usando response do addbanco	
+		//foto: srcFoto
+		alterarPagina("meusPets");
 		alert("Dados alterados com sucesso!");
 	}else{
 		alert("Algo deu errado");

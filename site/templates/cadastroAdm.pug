@@ -1,6 +1,6 @@
 ﻿body
 	| Foto:
-	img(id="imagemCadastro" alt="fotAdministrador" width="136px" height="154px")
+	img(id="imagemCadastro" alt="fotoAdministrador" width="136px" height="154px")
 	br
 	br
 	br
@@ -22,7 +22,8 @@
 		br
 		br
 		br
-		input(id="voltar" type="button" onClick="alterarPagina('listaAdm')" value="Voltar")
-		input(id="remover" type="button" onClick="removerCadastro('adms',  '" + a._id + "')" value="Remover Cadastro")
-		input(id="salvar" type="button" onClick="alterarCadastroAdm('adms', '" + a._id + "', true)" value="Salvar")
+		if(!proprioCadastro)
+			input(id="voltar" type="button" onClick="alterarPagina('listaAdm')" value="Voltar")
+			input(id="remover" type="button" onClick="removerCadastro('adms',  this.getAttribute('cod'))" value="Remover Cadastro" cod=a._id)
+		input(id="salvar" type="button" onClick="alterarCadastroAdm('adms', this.getAttribute('cod'), true)" value="Salvar" cod=a._id)
 	br

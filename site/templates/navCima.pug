@@ -12,6 +12,6 @@ html
       a(id="navCimaBlog" onClick="alterarPagina('blog')") Blog
       a(id="navCimaSair" style="float:right" onClick="sair()") Sair
       if(cliente)
-         h5(cod=chave id="welcome" onClick="alterarPagina(this.pagina)" pagina="loginClienteSucesso") Olá, #{nome} =D
+         h5(cod=chave id="welcome" onClick="alterarPagina(this.getAttribute('pagina'))" pagina="loginClienteSucesso") Olá, #{nome} =D
       else
-         h5(cod=chave id="welcome" onClick="alterarPagina(this.pagina)" pagina="loginAdminSucesso") Olá, #{nome} =D
+         h5(cod=chave id="welcome" onClick="alterarPagina(this.getAttribute('pagina'))" pagina="loginAdminSucesso") Olá, #{nome} =D

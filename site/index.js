@@ -68,7 +68,7 @@ app.get('/loginCliente.html', (req, res)=>{console.log(req.body);
 });
 
 // roteia o loginAdm.html
-app.get('/loginAdm.html', (req, res)=>{console.log(req.body);
+app.get('/loginAdm.html', (req, res)=>{console.log("solicitou login admin");
    res.sendFile(__dirname + "/loginAdm.html");
 });
 
@@ -83,13 +83,12 @@ app.post('/autenticar_no_banco', JSONParser, async (req, res)=>{
    let resposta = (await couchGet("/" + req.body.login)).body;
 
    if(resposta.senha == req.body.senha){
-      res.render("navCima", {nome: resposta.nome, chave: resposta.login, cliente: true});
+      res.render("navCima", {nome: resposta.nome, chave: resposta._id, cliente: true});
    }else{
       couchdb.database("adms");
       resposta = (await couchGet("/" + req.body.login)).body;
       if(resposta.senha == req.body.senha){
-         res.render("navCima", {nome: resposta.nome, chave: resposta.login, cliente: false});
-
+         res.render("navCima", {nome: resposta.nome, chave: resposta._id, cliente: false});
       }else res.send("");
    }
 });
@@ -113,10 +112,23 @@ app.post('/cadastroAdm.html', JSONParser, async (req, res)=>{
    const adm = (await couchGet(req.body.chave2)).body;
 
    if(adm){
-      res.render("cadastroAdm", {a: adm});
+      res.render("cadastroAdm", {a: adm, proprioCadastro: req.body.chave == req.body.chave2});
    }
    else{
-      res.send("Erro, usuário não encontrado.");
+      res.send("Erro, admin não encontrado.");
+   }
+});
+
+// roteia o cadastroPets.html
+app.post('/cadastroPets.html', JSONParser, async (req, res)=>{
+   couchdb.database('pets');
+   const pet = (await couchGet(req.body.chave2)).body;
+
+   if(pet){
+      res.render("cadastroPets", {pet: pet});
+   }
+   else{
+      res.send("Erro, pet não encontrado.");
    }
 });
 
@@ -291,6 +303,139 @@ app.get('/listaAdm.html', async (req, res)=>{
    res.render('listaAdm', {listaAdms: lista});
 });
 
+// roteia a lista de produtos para o administrador
+app.get('/listaProduto.html', async (req, res)=>{
+
+   let response = "";
+   couchdb.database('produtos');
+   let produtos = (await couchGet('_all_docs')).body.rows;
+   const lista = [];
+
+   for(let i in produtos){
+      try{
+         let produto = (await couchGet(produtos[i].key)).body;
+         if(produto._id){
+            lista[i] = {
+               nome: produto.nome + " " + produto.marca,
+               chave: produto._id
+            };
+         }
+      } catch (exception){
+         console.log(exception);
+      }
+   }
+   res.render('listaProduto', {listaProdutos: lista});
+});
+
+// roteia a lista de produtos para o administrador
+app.get('/listaServico.html', async (req, res)=>{
+
+   let response = "";
+   couchdb.database('servicos');
+   let servicos = (await couchGet('_all_docs')).body.rows;
+   const lista = [];
+
+   for(let i in servicos){
+      try{
+         let servico = (await couchGet(servicos[i].key)).body;
+         if(servico._id){
+            let nomeMarca = servico.nome;
+            if(servico.marca)
+               nomeMarca += " " + servico.marca;
+            lista[i] = {
+               nome:  nomeMarca,
+               chave: servico._id
+            };
+         }
+      } catch (exception){
+         console.log(exception);
+      }
+   }
+   res.render('listaServico', {listaServicos: lista});
+});
+
+app.post('/meusPets.html', JSONParser, async (req, res)=>{
+
+   let response = "";
+   couchdb.database('pets');
+   let pets = (await couchGet('_all_docs')).body.rows;
+   const lista = [];
+
+   for(let i in pets){
+      try{
+         let pet = (await couchGet(pets[i].key)).body;
+            console.log(pet.cliente + " " + req.body.chave);
+         if(pet._id && pet.cliente == req.body.chave){console.log("colocando pet " + pet._id + " " + pet.nome + " do cliente " + pet.cliente);
+            lista[i] = {
+            nome:  pet.nome,
+            chave: pet._id
+            };
+         }
+      } catch (exception){
+         console.log(exception);
+      }
+   }console.log(lista);
+   res.render('meusPets', {listaPets: lista});
+});
+
+// roteia os ganhos para o administrador
+app.get('/ganhos.html', async (req, res)=>{
+
+   let response = "";
+   couchdb.database('servicos');
+   let servicos = (await couchGet('_all_docs')).body.rows;
+   const listaServicos = [];
+
+   for(let i in servicos){
+      try{
+         let servico = (await couchGet(servicos[i].key)).body;
+         if(servico._id){
+            listaServicos[i] = {
+		servico
+            };
+         }
+      } catch (exception){
+         console.log(exception);
+      }
+   }
+
+   couchdb.database('produtos');
+   let produtos = (await couchGet('_all_docs')).body.rows;
+   let listaProdutos = [];
+
+   for(let i in produtos){
+      try{
+         let produto = (await couchGet(produtos[i].key)).body;
+         if(produto._id){
+            listaProdutos[i] = {
+		produto
+            };
+         }
+      } catch (exception){
+         console.log(exception);
+      }
+   }
+
+   couchdb.database('pets_loja');
+   let pets = (await couchGet('_all_docs')).body.rows;
+   let listaPets = [];
+
+   for(let i in pets){
+      try{
+         let pet = (await couchGet(pets[i].key)).body;
+         if(pet._id){
+            listaPets[i] = {
+		pet
+            };
+         }
+      } catch (exception){
+         console.log(exception);
+      }
+   }
+
+   res.render('ganhos', {servicos: listaServicos, produtos: listaProdutos, pets: listaPets});
+});
+
 // roteia a cadastrarCliente.html
 app.post('/cadastrarCliente.html', (req, res)=>{
    res.sendFile(__dirname + "/cadastrarCliente.html");
@@ -299,6 +444,11 @@ app.post('/cadastrarCliente.html', (req, res)=>{
 // roteia a cadastrarAdm.html
 app.post('/cadastrarAdm.html', (req, res)=>{
    res.sendFile(__dirname + "/cadastrarAdm.html");
+});
+
+// roteia a cadastrarPet.html
+app.get('/cadastrarPet.html', (req, res)=>{
+   res.sendFile(__dirname + "/cadastrarPet.html");
 });
 
 // roteia o cadastrarCliente para cadastrar o cliente no banco
@@ -313,6 +463,25 @@ app.put(/\/clientes\/.*/, JSONParser, async (req, res)=>{
 app.put(/\/adms\/.*/, JSONParser, async (req, res)=>{
    couchdb.database('adms');
    const resposta = (await couchPut(req.body.login, req.body)).body;
+
+   res.send(resposta);
+});
+
+// roteia o cadastrarAdm para cadastrar o administrador no banco
+app.put(/\/pets\/.*/, JSONParser, async (req, res)=>{
+   couchdb.database('pets');
+   pets = (await couchGet("_all_docs")).body;
+   if(pets.total_rows != 0){
+	   var novoId = String(parseInt(pets.rows[pets.total_rows - 1].key) + 1);
+	   console.log("novo id = " + novoId);
+   } else {
+      novoId = 0;
+   }
+   try {
+      var resposta = (await couchPut(novoId, req.body)).body;
+   } catch (err) {
+      console.log(err);
+   }
 
    res.send(resposta);
 });
@@ -337,6 +506,16 @@ app.post(/\/adms\/.*/, JSONParser, async (req, res)=>{console.log("salvar adm");
    res.send(resposta);
 });
 
+// roteia o cadastroPet para editar o cadastro do pet no banco
+app.post(/\/pets\/.*/, JSONParser, async (req, res)=>{
+   couchdb.database('pets');
+   const cod = req.body.cod;
+   delete req.body.cod;
+   const resposta = (await couchSave(cod, req.body)).body;
+
+   res.send(resposta);
+});
+
 // roteia o cadastroClienteAdm para remover o cliente do banco
 app.delete(/\/clientes\/.*/, async (req, res)=>{
    couchdb.database('clientes');
@@ -349,6 +528,15 @@ app.delete(/\/clientes\/.*/, async (req, res)=>{
 // roteia o cadastroAdm para remover o administrador do banco
 app.delete(/\/adms\/.*/, async (req, res)=>{
    couchdb.database('adms');
+   var id = req.url.split("/");
+   const resposta = (await couchDelete(id[id.length-1])).body;
+
+   res.send(resposta);
+});
+
+// roteia o cadastroAdm para remover o administrador do banco
+app.delete(/\/pets\/.*/, async (req, res)=>{
+   couchdb.database('pets');
    var id = req.url.split("/");
    const resposta = (await couchDelete(id[id.length-1])).body;
 
